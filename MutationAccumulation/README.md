@@ -1,3 +1,3 @@
 # MutationAccumulation
 
-All polymorphic sites were called in individuals included in Simons Genome Diversity Project (SGDP) (check [SGDP.ind](SGDP.ind)) using the [`cpoly`](https://github.com/DReichLab/cTools) program. In this folder I provide an example of the initial files needed ([SGDP.ind](SGDP.ind) and [SGDP22.par](SGDP22.par)) to run `cpoly` for chromosome 22 as described in the [software Github page](https://github.com/DReichLab/cTools).
+This directory contains the scripts to produce the data for the analysis of the derived mutation accumulation. To understand step by step the pipeline, see [derived_alleles.ipynb](derived_alleles.ipynb) Jupyther notebook. The counts of all mutation types per individual is found in [mutation_spectrum.txt](mutation_spectrum.txt).
