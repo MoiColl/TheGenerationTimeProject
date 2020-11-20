@@ -1,9 +1,0 @@
-indivname:	SGDP.ind
-indivoutname:	SGDP22_out.ind
-snpoutname:	SGDP22.snp
-genooutname:	SGDP22.geno
-dbhetfa:	hetfa.dblist
-dbmask:	mask.dblist
-chrom:	22
-minfilterval:	1
-polarize:	Href
