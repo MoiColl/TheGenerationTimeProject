@@ -62,6 +62,8 @@ def derived_alleles(chrom):
 	           "SGDP_{chrom}.snp".format(chrom = chrom), 
 	           "SGDP_{chrom}.geno".format(chrom = chrom)]
 	outputs = ["counts_{chrom}.txt".format(chrom = chrom)]
+	if chrom in [str(c) for c in range(1, 23)]:
+		outputs.append("CGenrichment_{}.txt".format(chrom))
 	options = {
 			'memory'  : '20g',
 			'walltime': '00:10:00',
@@ -71,6 +73,7 @@ def derived_alleles(chrom):
 	python derived_alleles.py {chrom}
 
 	mv counts_{chrom}.tmp counts_{chrom}.txt
+	mv CGenrichment_{chrom}.tmp CGenrichment_{chrom}.txt
 	'''.format(chrom = chrom)
 
 	return inputs, outputs, options, spec
@@ -81,8 +84,8 @@ def derived_alleles(chrom):
 Joins all mutation counts from derived_alleles() template
 '''
 def join_derived_alleles():
-	inputs  = ["counts_{chrom}.txt".format(chrom = chrom) for chrom in [c for c in range(1, 23)]]
-	outputs = []
+	inputs  = ["counts_{chrom}.txt".format(chrom = chrom) for chrom in [c for c in range(1, 23)]+["X", "Y"]]
+	outputs = ["mutation_spectrum.txt"]
 	options = {
 			'memory'  : '1g',
 			'walltime': '00:01:00',
@@ -90,13 +93,31 @@ def join_derived_alleles():
 	}
 	spec = '''
 	echo "" | awk '{{print "ind\treg\tsex\tchrom\tfiv\tanc\tthr\tder\tcounts"}}' > mutation_spectrum.tmp
-	for chrom in `seq 1 22`; do awk '{{if(NR>1){{print}}}}' counts_$chrom.txt >> mutation_spectrum.tmp; done
+	for chrom in `seq 1 22` X Y; do awk '{{if(NR>1){{print}}}}' counts_$chrom.txt >> mutation_spectrum.tmp; done
 	mv mutation_spectrum.tmp mutation_spectrum.txt
+
 	'''
 
 	return inputs, outputs, options, spec
 
+##5.
+'''
+Joins all CGenrichment files from derived_alleles() template
+'''
+def join_CGenrichment():
+	inputs  = ["CGenrichment_{chrom}.txt".format(chrom = chrom) for chrom in [c for c in range(1, 23)]]
+	outputs = ["CGenrichment.txt"]
+	options = {
+			'memory'  : '1g',
+			'walltime': '00:01:00',
+			'account' : 'simons'
+	}
+	spec = '''
+	echo "" | awk '{{print "ind\treg\tsex\tchrom\tnonEnrCG\tnonEnrnonCG\tEnrCG\tEnrnonCG"}}' > CGenrichment.tmp
+	for chrom in `seq 1 22`; do awk '{{if(NR>1){{print}}}}' CGenrichment_$chrom.txt >> CGenrichment.tmp; done
+	mv CGenrichment.tmp CGenrichment.txt
+	'''
 
-
+	return inputs, outputs, options, spec
 
 

@@ -4,8 +4,8 @@ gwf = Workflow()
 
 
 #B. Code
-# for chrom in [str(c) for c in range(1:23)]+["X", "Y"]:
-for chrom in [str(c) for c in range(1,23)]:
+for chrom in [str(c) for c in range(1,23)]+["X", "Y"]:
+# for chrom in [str(c) for c in range(1,23)]:
 	gwf.target_from_template("unz_{}".format(chrom),
 		unzip_ref(chrom = chrom))
 	gwf.target_from_template("mas_{}".format(chrom),
@@ -15,3 +15,5 @@ for chrom in [str(c) for c in range(1,23)]:
 
 gwf.target_from_template("mut_spec",
 	join_derived_alleles())
+gwf.target_from_template("CGenrichm",
+	join_CGenrichment())
