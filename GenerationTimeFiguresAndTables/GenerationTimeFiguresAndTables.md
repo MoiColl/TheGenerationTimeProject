@@ -51,14 +51,17 @@ To be able to run all chunks below, you need to have in the same directory as th
             - [ SI Table 1 ](#SupTab1)
             - [ SI Table 2 ](#SupTab2)
             - [ SI Table 3 ](#SupTab3)
-                - [ Downsampling West Eurasian individuals ](#Down)
             - [ SI Table 4 ](#SupTab4)
             - [ SI Table 5 ](#SupTab5)
             - [ SI Table 6 ](#SupTab6)
+                - [ Downsampling West Eurasian individuals ](#Down)
             - [ SI Table 7 ](#SupTab7)
             - [ SI Table 8 ](#SupTab8)
             - [ SI Table 9 ](#SupTab9)
             - [ SI Table 10 ](#SupTab10)
+            - [ SI Table 11 ](#SupTab11)
+            - [ SI Table 12 ](#SupTab12)
+            - [ SI Table 13 ](#SupTab13)
     
 3. [ Figures ](#Fig)
     + 1. [ Main figures ](#MaiFig)
@@ -73,21 +76,33 @@ To be able to run all chunks below, you need to have in the same directory as th
     + 3. [ Supplementary Figures ](#SupFig)
         - [ SI Figure 1 ](#SupFig1)
         - [ SI Figure 2 ](#SupFig2)
+        - [ SI Figure 3 ](#SupFig3)
         - [ SI Figure 4 ](#SupFig4)
         - [ SI Figure 5 ](#SupFig5)
         - [ SI Figure 6 ](#SupFig6)
         - [ SI Figure 7 ](#SupFig7)
+        - [ SI Figure 8 ](#SupFig8)
+        - [ SI Figure 9 ](#SupFig9)
+        - [ SI Figure 10 ](#SupFig10)
+        - [ SI Figure 11 ](#SupFig11)
+        - [ SI Figure 12 ](#SupFig12)
+        - [ SI Figure 13 ](#SupFig13)
+        - [ SI Figure 14 ](#SupFig14)
 
 4. [ Statistical test ](#Sta)
-    + 1. [ Difference average archaic fragment length among regions ](#Sta1)
-    + 2. [ Difference mean number archaic fragments among regions ](#Sta2)
-    + 3. [ Difference mean archaic sequence among regions ](#Sta3)
-    + 4. [ Difference average overlapping archaic fragment length among West Eurasians and East Asians ](#Sta4)
-    + 5. [ Difference accumulation of derived alleles among regions ](#Sta5)
-    + 6. [ Difference accumulation of derived alleles among West Eurasians and East Asians ](#Sta6)
-    + 7. [ Difference X-to-A ratio among regions ](#Sta7)
-    + 8. [ Difference CGenrichment ratio among regions ](#Sta8)
-    + 9. [ Difference accumulation of derived alleles on Y chromosome among regions ](#Sta9)
+    + 1.  [ Difference average archaic fragment length among regions ](#Sta1)
+    + 2.  [ Difference mean number archaic fragments among regions ](#Sta2)
+    + 3.  [ Difference mean archaic sequence among regions ](#Sta3)
+    + 4.  [ Difference average overlapping archaic fragment length among West Eurasians and East Asians ](#Sta4)
+    + 5.  [ Difference accumulation of derived alleles among regions ](#Sta5)
+    + 6.  [ Difference accumulation of derived alleles among West Eurasians and East Asians ](#Sta6)
+    + 7.  [ Linear model slopes correlation between the SGDP and deCODE ](#Sta7)
+    + 8.  [ Difference X-to-A ratio among regions ](#Sta8)
+    + 9.  [ Difference CGenrichment ratio among regions ](#Sta9)
+    + 10. [ Difference accumulation of derived alleles on Y chromosome among regions ](#Sta10)
+    + 11. [ Adjusted R-squared for the correlation between mean archaic fragment length and fraction of TCC>TTC derived alleles ](#Sta11)
+    + 12. [ Difference average archaic fragment length among regions in genetic and physical distances ](#Sta12)
+    + 13. [ Difference average archaic fragment length among homogeneous populations ](#Sta13)
 
 <a name="Lib"></a>
 ## 0. Library and packages
@@ -134,8 +149,11 @@ theme_set(theme_light() + theme(axis.title   = element_text(family = "Helvetica"
 
 ```
 
-    R[write to console]: Want to understand how all the pieces fit together? Read R for Data
-    Science: https://r4ds.had.co.nz/
+    R[write to console]: Registered S3 methods overwritten by 'ggplot2':
+      method         from 
+      [.quosures     rlang
+      c.quosures     rlang
+      print.quosures rlang
     
     R[write to console]: 
     Attaching package: ‘dplyr’
@@ -149,19 +167,6 @@ theme_set(theme_light() + theme(axis.title   = element_text(family = "Helvetica"
     R[write to console]: The following objects are masked from ‘package:base’:
     
         intersect, setdiff, setequal, union
-    
-    
-    R[write to console]: 
-    ********************************************************
-    
-    R[write to console]: Note: As of version 1.0.0, cowplot does not change the
-    
-    R[write to console]:   default ggplot2 theme anymore. To recover the previous
-    
-    R[write to console]:   behavior, execute:
-      theme_set(theme_cowplot())
-    
-    R[write to console]: ********************************************************
     
     
     R[write to console]: Loading required package: sp
@@ -178,7 +183,10 @@ theme_set(theme_light() + theme(axis.title   = element_text(family = "Helvetica"
 
 ```python
 regions   = ["WestEurasia", "SouthAsia", "America", "CentralAsiaSiberia", "EastAsia"]
+ancient   = ["UstIshim", "Yana1", "Sunghir3", "Kolyma", "Loschbour", "Stuttgart"]
 muttypes9 = ["T>A", "T>C", "T>G", "C>A", "C>T", "C>G", "CpG>TpG", "C>T'", "TCC>TTC"]
+
+np.random.seed(129306)
 ```
 
 
@@ -396,6 +404,141 @@ deCODE_mutation_spectrum_mean_age <- function(min_probands = 2, max_age_diff = 1
 
 
 ```python
+archstats = pd.DataFrame({"sample"      : [  "UstIshim",      "Yana1",    "Sunghir3",    "Anzick1",     "Kolyma",  "Loschbour",  "Stuttgart"],
+                          "age"         : [     45000  ,      39000  ,      34000   ,      13000  ,      10000  ,       8000  ,       7000  ],
+                          "coverage"    : [        37.4,         26.3,         10.75,         14.4,         15.3,         19.9,         18.1],
+                          "calledbases" : [1222190614  , 1114080903  , 1245732121   , 1144597852  , 1206453295  , 1241269102  , 1243802585  ],
+                          "Ts"          : [     33744  ,      38540  ,      26773   ,      38223  ,      41704  ,      40777  ,      41796  ],
+                          "Tv"          : [     17531  ,      18447  ,      13500   ,      14804  ,      20400  ,      19211  ,      19244  ]})
+
+archstats["Ts+Tv"] = archstats["Ts"]+archstats["Tv"]
+archstats["Ts/Tv"] = archstats["Ts"]/archstats["Tv"]  
+
+archstats.to_csv("SITab1.txt", sep='\t', index=False)
+
+archstats
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>sample</th>
+      <th>age</th>
+      <th>coverage</th>
+      <th>calledbases</th>
+      <th>Ts</th>
+      <th>Tv</th>
+      <th>Ts+Tv</th>
+      <th>Ts/Tv</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>UstIshim</td>
+      <td>45000</td>
+      <td>37.40</td>
+      <td>1222190614</td>
+      <td>33744</td>
+      <td>17531</td>
+      <td>51275</td>
+      <td>1.924819</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Yana1</td>
+      <td>39000</td>
+      <td>26.30</td>
+      <td>1114080903</td>
+      <td>38540</td>
+      <td>18447</td>
+      <td>56987</td>
+      <td>2.089229</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Sunghir3</td>
+      <td>34000</td>
+      <td>10.75</td>
+      <td>1245732121</td>
+      <td>26773</td>
+      <td>13500</td>
+      <td>40273</td>
+      <td>1.983185</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Anzick1</td>
+      <td>13000</td>
+      <td>14.40</td>
+      <td>1144597852</td>
+      <td>38223</td>
+      <td>14804</td>
+      <td>53027</td>
+      <td>2.581937</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Kolyma</td>
+      <td>10000</td>
+      <td>15.30</td>
+      <td>1206453295</td>
+      <td>41704</td>
+      <td>20400</td>
+      <td>62104</td>
+      <td>2.044314</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Loschbour</td>
+      <td>8000</td>
+      <td>19.90</td>
+      <td>1241269102</td>
+      <td>40777</td>
+      <td>19211</td>
+      <td>59988</td>
+      <td>2.122586</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Stuttgart</td>
+      <td>7000</td>
+      <td>18.10</td>
+      <td>1243802585</td>
+      <td>41796</td>
+      <td>19244</td>
+      <td>61040</td>
+      <td>2.171898</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+<a name="SupTab2"></a>
+#### SI Table 2
+
+
+```python
 archfrag_perind = %R archaicfragmentstatisticsperind() %>% rename(reg = region)
 archfrag_perind
 ```
@@ -545,7 +688,7 @@ archfrag_perreg_df = pd.DataFrame({
     "mean_len_se"   : archfrag_perreg["mean_len"][:, 1]
 })
 
-archfrag_perreg_df.to_csv("SITab1.txt", sep='\t', index=False)
+archfrag_perreg_df.to_csv("SITab2.txt", sep='\t', index=False)
 
 archfrag_perreg_df
 ```
@@ -586,56 +729,56 @@ archfrag_perreg_df
       <th>0</th>
       <td>WestEurasia</td>
       <td>71</td>
-      <td>980.952583</td>
-      <td>6.932549</td>
-      <td>7.213187e+07</td>
-      <td>7.498916e+05</td>
-      <td>73450.672430</td>
-      <td>374.989522</td>
+      <td>980.969891</td>
+      <td>6.942584</td>
+      <td>7.212957e+07</td>
+      <td>7.456718e+05</td>
+      <td>73449.231189</td>
+      <td>373.074920</td>
     </tr>
     <tr>
       <th>1</th>
       <td>SouthAsia</td>
       <td>39</td>
-      <td>1122.960003</td>
-      <td>11.263857</td>
-      <td>8.456577e+07</td>
-      <td>1.131449e+06</td>
-      <td>75221.513967</td>
-      <td>412.066415</td>
+      <td>1123.004915</td>
+      <td>11.251470</td>
+      <td>8.456617e+07</td>
+      <td>1.130742e+06</td>
+      <td>75221.838060</td>
+      <td>411.090280</td>
     </tr>
     <tr>
       <th>2</th>
       <td>America</td>
       <td>20</td>
-      <td>1078.852535</td>
-      <td>10.193831</td>
-      <td>8.632316e+07</td>
-      <td>8.025245e+05</td>
-      <td>80058.627617</td>
-      <td>561.995101</td>
+      <td>1078.841005</td>
+      <td>10.219468</td>
+      <td>8.632479e+07</td>
+      <td>8.067815e+05</td>
+      <td>80058.467623</td>
+      <td>563.050590</td>
     </tr>
     <tr>
       <th>3</th>
       <td>CentralAsiaSiberia</td>
       <td>27</td>
-      <td>1133.219880</td>
-      <td>8.860716</td>
-      <td>9.242688e+07</td>
-      <td>9.430960e+05</td>
-      <td>81542.974836</td>
-      <td>462.111490</td>
+      <td>1133.260560</td>
+      <td>8.831037</td>
+      <td>9.242843e+07</td>
+      <td>9.399930e+05</td>
+      <td>81543.883371</td>
+      <td>459.913714</td>
     </tr>
     <tr>
       <th>4</th>
       <td>EastAsia</td>
       <td>45</td>
-      <td>1161.569479</td>
-      <td>6.712706</td>
-      <td>9.555065e+07</td>
-      <td>7.099140e+05</td>
-      <td>82259.468314</td>
-      <td>400.587517</td>
+      <td>1161.588826</td>
+      <td>6.703758</td>
+      <td>9.554801e+07</td>
+      <td>7.088718e+05</td>
+      <td>82259.378819</td>
+      <td>401.917771</td>
     </tr>
   </tbody>
 </table>
@@ -644,8 +787,8 @@ archfrag_perreg_df
 
 
 
-<a name="SupTab2"></a>
-#### SI Table 2
+<a name="SupTab3"></a>
+#### SI Table 3
 
 
 
@@ -774,78 +917,78 @@ archfrag_perind
       <td>...</td>
     </tr>
     <tr>
-      <th>220667</th>
-      <td>Ust_ishim</td>
-      <td>Ust_ishim</td>
+      <th>223215</th>
+      <td>Yana1</td>
+      <td>Yana1</td>
       <td>X</td>
-      <td>52874000</td>
-      <td>52938000</td>
-      <td>64000</td>
-      <td>0.705496</td>
-      <td>4</td>
+      <td>32460000</td>
+      <td>32521000</td>
+      <td>61000</td>
+      <td>0.891950</td>
+      <td>12</td>
+      <td>10</td>
       <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <td>11</td>
     </tr>
     <tr>
-      <th>220668</th>
-      <td>Ust_ishim</td>
-      <td>Ust_ishim</td>
+      <th>223216</th>
+      <td>Yana1</td>
+      <td>Yana1</td>
       <td>X</td>
-      <td>90252000</td>
-      <td>90323000</td>
-      <td>71000</td>
-      <td>0.634501</td>
+      <td>55242000</td>
+      <td>55263000</td>
+      <td>21000</td>
+      <td>0.583173</td>
       <td>3</td>
       <td>0</td>
       <td>0</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>220669</th>
-      <td>Ust_ishim</td>
-      <td>Ust_ishim</td>
-      <td>X</td>
-      <td>103669000</td>
-      <td>103683000</td>
-      <td>14000</td>
-      <td>0.514657</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
       <td>0</td>
     </tr>
     <tr>
-      <th>220670</th>
-      <td>Ust_ishim</td>
-      <td>Ust_ishim</td>
+      <th>223217</th>
+      <td>Yana1</td>
+      <td>Yana1</td>
       <td>X</td>
-      <td>122053000</td>
-      <td>122224000</td>
-      <td>171000</td>
-      <td>0.938437</td>
-      <td>19</td>
+      <td>71840000</td>
+      <td>71903000</td>
+      <td>63000</td>
+      <td>0.871457</td>
+      <td>7</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
     </tr>
     <tr>
-      <th>220671</th>
-      <td>Ust_ishim</td>
-      <td>Ust_ishim</td>
+      <th>223218</th>
+      <td>Yana1</td>
+      <td>Yana1</td>
       <td>X</td>
-      <td>148883000</td>
-      <td>149416000</td>
-      <td>533000</td>
-      <td>0.914074</td>
-      <td>38</td>
-      <td>22</td>
+      <td>83570000</td>
+      <td>83681000</td>
+      <td>111000</td>
+      <td>0.934313</td>
+      <td>14</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>223219</th>
+      <td>Yana1</td>
+      <td>Yana1</td>
+      <td>X</td>
+      <td>126219000</td>
+      <td>126278000</td>
+      <td>59000</td>
+      <td>0.758207</td>
       <td>5</td>
-      <td>26</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
     </tr>
   </tbody>
 </table>
-<p>220672 rows × 11 columns</p>
+<p>223220 rows × 11 columns</p>
 </div>
 
 
@@ -853,8 +996,7 @@ archfrag_perind
 
 ```python
 archfrag_perancsamp = []
-samples = ["Ust_ishim", "Loschbour", "Stuttgart"]
-for name in samples:
+for name in ancient:
     archfrag_perancsamp.append(bootstrap(archfrag_perind[archfrag_perind["name"] == name]["length"]))
 archfrag_perancsamp = np.array(archfrag_perancsamp)
 ```
@@ -862,14 +1004,14 @@ archfrag_perancsamp = np.array(archfrag_perancsamp)
 
 ```python
 archfrag_perancsamp_df = pd.DataFrame({
-    "samples"  : samples,
-    "n_frag"   : [np.sum((archfrag_perind["name"] == name)) for name in samples],
-    "arch_seq" : [np.sum(archfrag_perind[archfrag_perind["name"] == name]["length"])         for name in samples],
+    "samples"  : ancient,
+    "n_frag"   : [np.sum((archfrag_perind["name"] == name)) for name in ancient],
+    "arch_seq" : [np.sum(archfrag_perind[archfrag_perind["name"] == name]["length"])         for name in ancient],
     "len_mean" : archfrag_perancsamp[:, 0],
     "len_se"   : archfrag_perancsamp[:, 1]
 })
 
-archfrag_perancsamp_df.to_csv("SITab2.txt", sep='\t', index=False)
+archfrag_perancsamp_df.to_csv("SITab3.txt", sep='\t', index=False)
 
 archfrag_perancsamp_df
 ```
@@ -905,27 +1047,51 @@ archfrag_perancsamp_df
   <tbody>
     <tr>
       <th>0</th>
-      <td>Ust_ishim</td>
-      <td>763</td>
-      <td>134360000</td>
-      <td>176079.179895</td>
-      <td>12298.828401</td>
+      <td>UstIshim</td>
+      <td>646</td>
+      <td>121078000</td>
+      <td>187390.833978</td>
+      <td>12363.505131</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>Loschbour</td>
-      <td>921</td>
-      <td>75757000</td>
-      <td>82245.209034</td>
-      <td>3064.343124</td>
+      <td>Yana1</td>
+      <td>847</td>
+      <td>115006000</td>
+      <td>135785.004699</td>
+      <td>6229.818005</td>
     </tr>
     <tr>
       <th>2</th>
+      <td>Sunghir3</td>
+      <td>593</td>
+      <td>67174000</td>
+      <td>113280.875497</td>
+      <td>5082.353851</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Kolyma</td>
+      <td>948</td>
+      <td>87830000</td>
+      <td>92673.620601</td>
+      <td>3982.941448</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Loschbour</td>
+      <td>802</td>
+      <td>76115000</td>
+      <td>94918.941596</td>
+      <td>3675.411556</td>
+    </tr>
+    <tr>
+      <th>5</th>
       <td>Stuttgart</td>
-      <td>1101</td>
-      <td>85950000</td>
-      <td>78058.373824</td>
-      <td>2720.517586</td>
+      <td>755</td>
+      <td>65449000</td>
+      <td>86681.356623</td>
+      <td>3812.451385</td>
     </tr>
   </tbody>
 </table>
@@ -933,22 +1099,43 @@ archfrag_perancsamp_df
 
 
 
-<a name="SupTab3"></a>
-#### SI Tab 3
-
-<a name="Down"></a>
-#### Downsampling West Eurasian individuals
+<a name="SupTab4"></a>
+#### SI Tab 4
 
 
 ```python
-if not os.path.isfile('downsampled_WestEurasia.txt'):
-    (pd.read_csv("SGDP.ind", sep = "\t", names = ["ind", "sex", "reg"])
-         .query("reg == 'WestEurasia'")
-         .sample(n=45)["ind"]
-         .sort_values()
-         .to_csv("downsampled_WestEurasia.txt", sep='\t', index=False, header = False))
-    
-pd.read_csv("downsampled_WestEurasia.txt", sep = "\t")
+sgdp21kgp = {"Dai"      : {"1KGP" : "CDX"},
+             "Han"      : {"1KGP" : "CHB"},
+             "Japanese" : {"1KGP" : "JPT"},
+             "Kinh"     : {"1KGP" : "KHV"},
+             "Finnish"  : {"1KGP" : "FIN"},
+             "English"  : {"1KGP" : "GBR"},
+             "Spanish"  : {"1KGP" : "IBS"},
+             "Tuscan"   : {"1KGP" : "TSI"},
+             "Bengali"  : {"1KGP" : "BEB"},
+             "Punjabi"  : {"1KGP" : "PJL"}}
+
+
+pd.read_csv("SGDP.ind", sep = "\t", names = ["ind", "sex", "reg"])
+with open("SGDP.ind") as file:
+    for line in file:
+        ind, sex, reg = line.strip().split()
+        ind = ind.split("_")[-1].split("-")[0]
+        for key in sgdp21kgp:
+            if key == ind:
+                if "reg" not in sgdp21kgp[key]:
+                    sgdp21kgp[key]["reg"] =  reg
+                    sgdp21kgp[key]["n"]   =  0
+                sgdp21kgp[key]["n"] += 1
+
+
+                
+pd.DataFrame({"region" : [sgdp21kgp[k]["reg"]  for k in sgdp21kgp],
+              "n"      : [sgdp21kgp[k]["n"]    for k in sgdp21kgp],
+              "SGDP"   : [k                    for k in sgdp21kgp],
+              "1KGP"   : [sgdp21kgp[k]["1KGP"] for k in sgdp21kgp]}).to_csv("SITab4.txt", sep='\t', index=False)
+
+pd.read_csv("SITab4.txt", sep = "\t")
 ```
 
 
@@ -972,184 +1159,466 @@ pd.read_csv("downsampled_WestEurasia.txt", sep = "\t")
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>S_Abkhasian-1</th>
+      <th>region</th>
+      <th>n</th>
+      <th>SGDP</th>
+      <th>1KGP</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>S_Adygei-1</td>
+      <td>EastAsia</td>
+      <td>3</td>
+      <td>Dai</td>
+      <td>CDX</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>S_Adygei-2</td>
+      <td>EastAsia</td>
+      <td>2</td>
+      <td>Han</td>
+      <td>CHB</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>S_Albanian-1</td>
+      <td>EastAsia</td>
+      <td>3</td>
+      <td>Japanese</td>
+      <td>JPT</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>S_Armenian-1</td>
+      <td>EastAsia</td>
+      <td>2</td>
+      <td>Kinh</td>
+      <td>KHV</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>S_Armenian-2</td>
+      <td>WestEurasia</td>
+      <td>3</td>
+      <td>Finnish</td>
+      <td>FIN</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>S_Basque-1</td>
+      <td>WestEurasia</td>
+      <td>2</td>
+      <td>English</td>
+      <td>GBR</td>
     </tr>
     <tr>
       <th>6</th>
-      <td>S_Basque-2</td>
+      <td>WestEurasia</td>
+      <td>2</td>
+      <td>Spanish</td>
+      <td>IBS</td>
     </tr>
     <tr>
       <th>7</th>
-      <td>S_BedouinB-1</td>
+      <td>WestEurasia</td>
+      <td>2</td>
+      <td>Tuscan</td>
+      <td>TSI</td>
     </tr>
     <tr>
       <th>8</th>
-      <td>S_BedouinB-2</td>
+      <td>SouthAsia</td>
+      <td>2</td>
+      <td>Bengali</td>
+      <td>BEB</td>
     </tr>
     <tr>
       <th>9</th>
-      <td>S_Bergamo-1</td>
+      <td>SouthAsia</td>
+      <td>4</td>
+      <td>Punjabi</td>
+      <td>PJL</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+<a name="SupTab5"></a>
+#### SI Tab 5
+
+
+```r
+%%R
+
+homogeneouspopdist <- function(){
+    rbind(
+        read.table("Data1_archaicfragments.txt", header = TRUE) %>% 
+            filter(region %in% c("WestEurasia", "EastAsia")) %>% 
+            group_by(name, region) %>%
+            summarize(n_frag = n(), total_seq = sum(length), mean_len = mean(length)) %>%
+            gather("frag", "value", n_frag, total_seq, mean_len) %>%
+            group_by(region, frag) %>%
+            summarize(mean = mean(value), sd = sd(value)) %>%
+            gather("stat", "value", mean, sd) %>%
+            unite("stat", c(frag, stat), sep = "_") %>%
+            spread(stat, value) %>%
+            mutate(dataset = "SGDP", population = "-") %>%
+            select(dataset, population, region, n_frag_mean, n_frag_sd, total_seq_mean, total_seq_sd, mean_len_mean, mean_len_sd),
+
+        read.table("Data3_HGDParchaicfragments.txt", header = T) %>%
+            group_by(name, population, region) %>%
+            summarize(n_frag = n(), total_seq = sum(length), mean_len = mean(length)) %>%
+            gather("frag", "value", n_frag, total_seq, mean_len) %>%
+            group_by(population, region, frag) %>%
+            summarize(mean = mean(value), sd = sd(value)) %>%
+            gather("stat", "value", mean, sd) %>%
+            unite("stat", c(frag, stat), sep = "_") %>%
+            spread(stat, value) %>%
+            mutate(dataset = "HGDP") %>%
+            select(dataset, population, region, n_frag_mean, n_frag_sd, total_seq_mean, total_seq_sd, mean_len_mean, mean_len_sd)) 
+}
+```
+
+
+```python
+homogeneouspopdist = %R homogeneouspopdist()
+
+homogeneouspopdist.to_csv("SITab5.txt", sep='\t', index=False)
+
+homogeneouspopdist
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>dataset</th>
+      <th>population</th>
+      <th>region</th>
+      <th>n_frag_mean</th>
+      <th>n_frag_sd</th>
+      <th>total_seq_mean</th>
+      <th>total_seq_sd</th>
+      <th>mean_len_mean</th>
+      <th>mean_len_sd</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>SGDP</td>
+      <td>-</td>
+      <td>EastAsia</td>
+      <td>1161.577778</td>
+      <td>45.384964</td>
+      <td>9.554913e+07</td>
+      <td>4.820292e+06</td>
+      <td>82259.243285</td>
+      <td>2723.393625</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>SGDP</td>
+      <td>-</td>
+      <td>WestEurasia</td>
+      <td>980.929577</td>
+      <td>58.974649</td>
+      <td>7.213339e+07</td>
+      <td>6.332052e+06</td>
+      <td>73450.201238</td>
+      <td>3174.571458</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>HGDP</td>
+      <td>Han</td>
+      <td>EAST_ASIA</td>
+      <td>1241.121212</td>
+      <td>47.322535</td>
+      <td>1.058498e+08</td>
+      <td>4.611438e+06</td>
+      <td>85354.279961</td>
+      <td>3904.236908</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>HGDP</td>
+      <td>Lahu</td>
+      <td>EAST_ASIA</td>
+      <td>1259.375000</td>
+      <td>42.704759</td>
+      <td>1.081366e+08</td>
+      <td>5.480052e+06</td>
+      <td>85907.759066</td>
+      <td>4395.199869</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>HGDP</td>
+      <td>Palestinian</td>
+      <td>MIDDLE_EAST</td>
+      <td>1044.152174</td>
+      <td>62.614506</td>
+      <td>7.301154e+07</td>
+      <td>3.644923e+06</td>
+      <td>70076.649036</td>
+      <td>4032.194938</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>HGDP</td>
+      <td>Sardinian</td>
+      <td>EUROPE</td>
+      <td>1013.178571</td>
+      <td>51.662762</td>
+      <td>7.628857e+07</td>
+      <td>3.624999e+06</td>
+      <td>75467.910354</td>
+      <td>4985.066865</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+<a name="SupTab6"></a>
+#### SI Tab 6
+
+<a name="Down"></a>
+#### Downsampling West Eurasian individuals
+
+
+```python
+if not os.path.isfile('downsampled_WestEurasia.txt'):
+    (pd.read_csv("SGDP.ind", sep = "\t", names = ["ind", "sex", "reg"])
+         .query("reg == 'WestEurasia'")
+         .sample(n=45)["ind"]
+         .sort_values()
+         .to_csv("downsampled_WestEurasia.txt", sep='\t', index=False, header = False))
+    
+pd.read_csv("downsampled_WestEurasia.txt", sep = "\t", names = ["ind"])
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ind</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>S_Abkhasian-1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>S_Adygei-1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>S_Adygei-2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>S_Albanian-1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>S_Armenian-1</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>S_Armenian-2</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>S_Basque-1</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>S_Basque-2</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>S_BedouinB-1</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>S_BedouinB-2</td>
     </tr>
     <tr>
       <th>10</th>
-      <td>S_Bulgarian-2</td>
+      <td>S_Bergamo-1</td>
     </tr>
     <tr>
       <th>11</th>
-      <td>S_Druze-2</td>
+      <td>S_Bulgarian-2</td>
     </tr>
     <tr>
       <th>12</th>
-      <td>S_English-1</td>
+      <td>S_Druze-2</td>
     </tr>
     <tr>
       <th>13</th>
-      <td>S_English-2</td>
+      <td>S_English-1</td>
     </tr>
     <tr>
       <th>14</th>
-      <td>S_Estonian-1</td>
+      <td>S_English-2</td>
     </tr>
     <tr>
       <th>15</th>
-      <td>S_Estonian-2</td>
+      <td>S_Estonian-1</td>
     </tr>
     <tr>
       <th>16</th>
-      <td>S_Finnish-1</td>
+      <td>S_Estonian-2</td>
     </tr>
     <tr>
       <th>17</th>
-      <td>S_Finnish-2</td>
+      <td>S_Finnish-1</td>
     </tr>
     <tr>
       <th>18</th>
-      <td>S_Finnish-3</td>
+      <td>S_Finnish-2</td>
     </tr>
     <tr>
       <th>19</th>
-      <td>S_French-1</td>
+      <td>S_Finnish-3</td>
     </tr>
     <tr>
       <th>20</th>
-      <td>S_French-2</td>
+      <td>S_French-1</td>
     </tr>
     <tr>
       <th>21</th>
-      <td>S_Georgian-2</td>
+      <td>S_French-2</td>
     </tr>
     <tr>
       <th>22</th>
-      <td>S_Greek-2</td>
+      <td>S_Georgian-2</td>
     </tr>
     <tr>
       <th>23</th>
-      <td>S_Icelandic-1</td>
+      <td>S_Greek-2</td>
     </tr>
     <tr>
       <th>24</th>
-      <td>S_Iraqi_Jew-2</td>
+      <td>S_Icelandic-1</td>
     </tr>
     <tr>
       <th>25</th>
-      <td>S_Jordanian-1</td>
+      <td>S_Iraqi_Jew-2</td>
     </tr>
     <tr>
       <th>26</th>
-      <td>S_Jordanian-2</td>
+      <td>S_Jordanian-1</td>
     </tr>
     <tr>
       <th>27</th>
-      <td>S_Lezgin-1</td>
+      <td>S_Jordanian-2</td>
     </tr>
     <tr>
       <th>28</th>
-      <td>S_North_Ossetian-2</td>
+      <td>S_Lezgin-1</td>
     </tr>
     <tr>
       <th>29</th>
-      <td>S_Norwegian-1</td>
+      <td>S_North_Ossetian-2</td>
     </tr>
     <tr>
       <th>30</th>
-      <td>S_Orcadian-1</td>
+      <td>S_Norwegian-1</td>
     </tr>
     <tr>
       <th>31</th>
-      <td>S_Orcadian-2</td>
+      <td>S_Orcadian-1</td>
     </tr>
     <tr>
       <th>32</th>
-      <td>S_Palestinian-1</td>
+      <td>S_Orcadian-2</td>
     </tr>
     <tr>
       <th>33</th>
-      <td>S_Palestinian-2</td>
+      <td>S_Palestinian-1</td>
     </tr>
     <tr>
       <th>34</th>
-      <td>S_Palestinian-3</td>
+      <td>S_Palestinian-2</td>
     </tr>
     <tr>
       <th>35</th>
-      <td>S_Polish-1</td>
+      <td>S_Palestinian-3</td>
     </tr>
     <tr>
       <th>36</th>
-      <td>S_Russian-1</td>
+      <td>S_Polish-1</td>
     </tr>
     <tr>
       <th>37</th>
-      <td>S_Saami-1</td>
+      <td>S_Russian-1</td>
     </tr>
     <tr>
       <th>38</th>
-      <td>S_Samaritan-1</td>
+      <td>S_Saami-1</td>
     </tr>
     <tr>
       <th>39</th>
-      <td>S_Sardinian-2</td>
+      <td>S_Samaritan-1</td>
     </tr>
     <tr>
       <th>40</th>
-      <td>S_Spanish-1</td>
+      <td>S_Sardinian-2</td>
     </tr>
     <tr>
       <th>41</th>
-      <td>S_Spanish-2</td>
+      <td>S_Spanish-1</td>
     </tr>
     <tr>
       <th>42</th>
-      <td>S_Tuscan-2</td>
+      <td>S_Spanish-2</td>
     </tr>
     <tr>
       <th>43</th>
+      <td>S_Tuscan-2</td>
+    </tr>
+    <tr>
+      <th>44</th>
       <td>S_Yemenite_Jew-1</td>
     </tr>
   </tbody>
@@ -1165,6 +1634,22 @@ pd.read_csv("downsampled_WestEurasia.txt", sep = "\t")
 egrep -f downsampled_WestEurasia.txt Data1_archaicfragments.txt > archaicfragments_WE.txt
 egrep "EastAsia" Data1_archaicfragments.txt > archaicfragments_EA.txt
 ```
+
+
+```bash
+%%bash
+
+echo "Number samples WestEurasia"
+cut -f 1 archaicfragments_WE.txt | uniq | wc -l
+echo "Number samples EastAsia"
+cut -f 1 archaicfragments_EA.txt | uniq | wc -l
+```
+
+    Number samples WestEurasia
+    45
+    Number samples EastAsia
+    45
+
 
 Total archaic sequence in WestEurasia
 
@@ -1210,14 +1695,16 @@ awk '{sum = sum+($3-$2)}END{print sum}' archaicfragments_shared_WEEA.bed
 
 
 ```python
+two_regions = ["WestEurasia", "EastAsia"]
+
 archfrag_sharedprivateall_joined_perreg_df = pd.DataFrame({
     "region"        : ["WestEurasia", "EastAsia"]*3,
-    "n_samples"     : [np.sum((archfrag_shared_perind["reg"] == reg)) for reg in two_regions]*3,
+    "n_samples"     : [45, 45]*3,
     "type"          : ["Shared", "Shared", "Private", "Private", "All", "All"],
     "arch_seq"      : [485255000, 485255000, 866945000-485255000, 916369000-485255000, 866945000, 916369000]
 })
 
-archfrag_sharedprivateall_joined_perreg_df.sort_values(["region"], ascending = False).to_csv("SITab3.txt", sep='\t', index=False)
+archfrag_sharedprivateall_joined_perreg_df.sort_values(["region"], ascending = False).to_csv("SITab6.txt", sep='\t', index=False)
 
 archfrag_sharedprivateall_joined_perreg_df.sort_values(["region"], ascending = False)
 ```
@@ -1298,8 +1785,8 @@ archfrag_sharedprivateall_joined_perreg_df.sort_values(["region"], ascending = F
 
 
 
-<a name="SupTab4"></a>
-#### SI Tab 4
+<a name="SupTab7"></a>
+#### SI Tab 7
 
 Shared individual archaic fragments
 
@@ -1466,7 +1953,6 @@ archfrag_shared_perind
 
 ```python
 archfrag_shared_perreg = defaultdict(lambda : None)
-two_regions = ["WestEurasia", "EastAsia"]
 
 for stat in ["num_frag", "arch_seq", "mean_len"]:
     archfrag_shared_perreg[stat] = boot_perregion(archfrag_shared_perind, two_regions, stat)
@@ -1785,7 +2271,7 @@ archfrag_sharedprivateall_individual_perreg_df = pd.DataFrame({
     "mean_len_se"   : list(archfrag_shared_perreg["mean_len"][:, 1]) + list(archfrag_private_perreg["mean_len"][:, 1]) + list(archfrag_all_perreg["mean_len"][:, 1])
 })
 
-archfrag_sharedprivateall_individual_perreg_df.sort_values(["region"], ascending = False).to_csv("SITab4.txt", sep='\t', index=False)
+archfrag_sharedprivateall_individual_perreg_df.sort_values(["region"], ascending = False).to_csv("SITab7.txt", sep='\t', index=False)
 
 archfrag_sharedprivateall_individual_perreg_df.sort_values(["region"], ascending = False)
 ```
@@ -1828,72 +2314,72 @@ archfrag_sharedprivateall_individual_perreg_df.sort_values(["region"], ascending
       <td>WestEurasia</td>
       <td>45</td>
       <td>Shared</td>
-      <td>756.245783</td>
-      <td>9.442278</td>
-      <td>5.988407e+07</td>
-      <td>956141.456725</td>
-      <td>79064.228335</td>
-      <td>476.251502</td>
+      <td>756.200007</td>
+      <td>9.439607</td>
+      <td>5.987829e+07</td>
+      <td>956290.186232</td>
+      <td>79061.497392</td>
+      <td>479.814621</td>
     </tr>
     <tr>
       <th>2</th>
       <td>WestEurasia</td>
       <td>45</td>
       <td>Private</td>
-      <td>221.554625</td>
-      <td>2.850735</td>
-      <td>1.147696e+07</td>
-      <td>241202.881855</td>
-      <td>51734.202457</td>
-      <td>741.880534</td>
+      <td>221.563478</td>
+      <td>2.855489</td>
+      <td>1.147626e+07</td>
+      <td>241069.153686</td>
+      <td>51736.335365</td>
+      <td>738.838513</td>
     </tr>
     <tr>
       <th>4</th>
       <td>WestEurasia</td>
       <td>45</td>
       <td>All</td>
-      <td>977.743020</td>
-      <td>9.751946</td>
-      <td>7.135619e+07</td>
-      <td>993646.474926</td>
-      <td>72876.727298</td>
-      <td>443.353096</td>
+      <td>977.740269</td>
+      <td>9.765152</td>
+      <td>7.136074e+07</td>
+      <td>992105.260985</td>
+      <td>72878.361967</td>
+      <td>445.447335</td>
     </tr>
     <tr>
       <th>1</th>
       <td>EastAsia</td>
       <td>45</td>
       <td>Shared</td>
-      <td>913.777850</td>
-      <td>5.076751</td>
-      <td>8.172263e+07</td>
-      <td>585599.954798</td>
-      <td>89446.911797</td>
-      <td>477.611800</td>
+      <td>913.795892</td>
+      <td>5.091155</td>
+      <td>8.172641e+07</td>
+      <td>586299.594055</td>
+      <td>89450.848530</td>
+      <td>477.091853</td>
     </tr>
     <tr>
       <th>3</th>
       <td>EastAsia</td>
       <td>45</td>
       <td>Private</td>
-      <td>247.797823</td>
-      <td>3.765804</td>
-      <td>1.382742e+07</td>
-      <td>250724.720215</td>
-      <td>55785.715212</td>
-      <td>575.350791</td>
+      <td>247.790226</td>
+      <td>3.758068</td>
+      <td>1.382808e+07</td>
+      <td>250216.663953</td>
+      <td>55783.232336</td>
+      <td>572.334395</td>
     </tr>
     <tr>
       <th>5</th>
       <td>EastAsia</td>
       <td>45</td>
       <td>All</td>
-      <td>1161.538354</td>
-      <td>6.692737</td>
-      <td>9.554765e+07</td>
-      <td>709434.277748</td>
-      <td>82258.976278</td>
-      <td>401.976909</td>
+      <td>1161.573449</td>
+      <td>6.674199</td>
+      <td>9.554987e+07</td>
+      <td>710273.364571</td>
+      <td>82256.352744</td>
+      <td>401.749709</td>
     </tr>
   </tbody>
 </table>
@@ -1901,8 +2387,8 @@ archfrag_sharedprivateall_individual_perreg_df.sort_values(["region"], ascending
 
 
 
-<a name="SupTab5"></a>
-#### SI Tab 5
+<a name="SupTab8"></a>
+#### SI Tab 8
 
 
 ```bash
@@ -1913,14 +2399,6 @@ awk '{sum = sum + ($3-$2)}END{print sum}' archaicfragments_joined_EA.bed
 
     916369000
 
-
-
-```python
-8 = snps
-9 = ALtai
-10 = Denisova
-11 = Vindija
-```
 
 
 ```bash
@@ -1999,13 +2477,85 @@ archfrag_affinitytoarchaics = pd.DataFrame({
     "WestEurasia_shared"     : shared_joined_arch_seq*100/joined_WestEurasia
 })
 
-archfrag_affinitytoarchaics.to_csv("SITab5.txt", sep='\t', index=False)
+archfrag_affinitytoarchaics.to_csv("SITab8.txt", sep='\t', index=False)
 
 archfrag_affinitytoarchaics
 ```
 
-<a name="SupTab6"></a>
-#### SI Tab 6
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>joined_EastAsia</th>
+      <th>joined_WestEurasia</th>
+      <th>fold_diff</th>
+      <th>shared_joined_arch_seq</th>
+      <th>EastAsia_shared</th>
+      <th>WestEurasia_shared</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>916369000</td>
+      <td>866945000</td>
+      <td>1.057009</td>
+      <td>485255000</td>
+      <td>52.954105</td>
+      <td>55.972986</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>107695000</td>
+      <td>36850000</td>
+      <td>2.922524</td>
+      <td>16004000</td>
+      <td>14.860486</td>
+      <td>43.430122</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>853065000</td>
+      <td>850028000</td>
+      <td>1.003573</td>
+      <td>460490000</td>
+      <td>53.980646</td>
+      <td>54.173510</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>646710000</td>
+      <td>604518000</td>
+      <td>1.069794</td>
+      <td>309043000</td>
+      <td>47.786952</td>
+      <td>51.122216</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+<a name="SupTab9"></a>
+#### SI Tab 9
 
 
 ```python
@@ -2115,7 +2665,7 @@ derivedalleles_perind
 
 
 ```python
-derivedalleles_perreg = boot_per_region(derivedalleles_perind, "counts")
+derivedalleles_perreg = boot_perregion(derivedalleles_perind, regions, "counts")
 ```
 
 
@@ -2127,7 +2677,7 @@ derivedalleles_perreg_df = pd.DataFrame({
     "derallele_se"   : derivedalleles_perreg[:, 1]
 })
 
-derivedalleles_perreg_df.to_csv("SITab6.txt", sep='\t', index=False)
+derivedalleles_perreg_df.to_csv("SITab9.txt", sep='\t', index=False)
 
 derivedalleles_perreg_df
 ```
@@ -2164,36 +2714,36 @@ derivedalleles_perreg_df
       <th>0</th>
       <td>WestEurasia</td>
       <td>71</td>
-      <td>31408.542665</td>
-      <td>62.606557</td>
+      <td>31408.114492</td>
+      <td>62.550304</td>
     </tr>
     <tr>
       <th>1</th>
       <td>SouthAsia</td>
       <td>39</td>
-      <td>31418.283969</td>
-      <td>56.066166</td>
+      <td>31418.135798</td>
+      <td>55.815399</td>
     </tr>
     <tr>
       <th>2</th>
       <td>America</td>
       <td>20</td>
-      <td>31417.638237</td>
-      <td>83.307248</td>
+      <td>31418.164938</td>
+      <td>83.022455</td>
     </tr>
     <tr>
       <th>3</th>
       <td>CentralAsiaSiberia</td>
       <td>27</td>
-      <td>31074.208321</td>
-      <td>88.528073</td>
+      <td>31074.558962</td>
+      <td>88.842367</td>
     </tr>
     <tr>
       <th>4</th>
       <td>EastAsia</td>
       <td>45</td>
-      <td>31069.767669</td>
-      <td>80.994320</td>
+      <td>31070.033149</td>
+      <td>81.182845</td>
     </tr>
   </tbody>
 </table>
@@ -2201,8 +2751,8 @@ derivedalleles_perreg_df
 
 
 
-<a name="SupTab7"></a>
-#### SI Tab 7
+<a name="SupTab10"></a>
+#### SI Tab 10
 
 
 ```python
@@ -2364,7 +2914,7 @@ derivedalleles_9mutspectrum_perreg = defaultdict(lambda : [])
 for mut in muttypes9:
     print(mut)
     for stat in ["counts", "frac"]:
-        derivedalleles_9mutspectrum_perreg[mut].append(boot_per_region(derivedalleles_9mutspectrum_perind[derivedalleles_9mutspectrum_perind["mutation"] == mut], stat))
+        derivedalleles_9mutspectrum_perreg[mut].append(boot_perregion(derivedalleles_9mutspectrum_perind[derivedalleles_9mutspectrum_perind["mutation"] == mut], regions, stat))
 ```
 
     T>A
@@ -2388,7 +2938,7 @@ for mut in muttypes9:
     derivedalleles_9mutspectrum_perreg_df["{}_{}_mean".format(mut, "frac")]   = derivedalleles_9mutspectrum_perreg[mut][1][:, 0]
     derivedalleles_9mutspectrum_perreg_df["{}_{}_se".format(mut, "frac")]     = derivedalleles_9mutspectrum_perreg[mut][1][:, 1]
 
-derivedalleles_9mutspectrum_perreg_df.to_csv("SITab7.txt", sep='\t', index=False)
+derivedalleles_9mutspectrum_perreg_df.to_csv("SITab10.txt", sep='\t', index=False)
     
 derivedalleles_9mutspectrum_perreg_df
 ```
@@ -2441,121 +2991,121 @@ derivedalleles_9mutspectrum_perreg_df
     <tr>
       <th>0</th>
       <td>WestEurasia</td>
-      <td>2121.018491</td>
-      <td>8.109616</td>
-      <td>0.067528</td>
-      <td>0.000205</td>
-      <td>8944.939607</td>
-      <td>18.573460</td>
-      <td>0.284811</td>
-      <td>0.000354</td>
-      <td>2238.911646</td>
+      <td>2121.027956</td>
+      <td>8.076731</td>
+      <td>0.067529</td>
+      <td>0.000204</td>
+      <td>8945.032664</td>
+      <td>18.605123</td>
+      <td>0.284808</td>
+      <td>0.000355</td>
+      <td>2238.924683</td>
       <td>...</td>
       <td>0.130368</td>
-      <td>0.000278</td>
-      <td>7684.861655</td>
-      <td>17.139469</td>
-      <td>0.244682</td>
-      <td>0.000315</td>
-      <td>817.348992</td>
-      <td>4.416066</td>
+      <td>0.000277</td>
+      <td>7684.899040</td>
+      <td>17.158211</td>
+      <td>0.244683</td>
+      <td>0.000316</td>
+      <td>817.329134</td>
+      <td>4.417354</td>
       <td>0.026025</td>
       <td>0.000137</td>
     </tr>
     <tr>
       <th>1</th>
       <td>SouthAsia</td>
-      <td>2178.707955</td>
-      <td>10.370303</td>
-      <td>0.069340</td>
+      <td>2178.665696</td>
+      <td>10.367755</td>
+      <td>0.069339</td>
       <td>0.000275</td>
-      <td>9052.315443</td>
-      <td>18.905179</td>
+      <td>9052.309180</td>
+      <td>18.859504</td>
       <td>0.288132</td>
-      <td>0.000485</td>
-      <td>2249.053746</td>
+      <td>0.000486</td>
+      <td>2249.064077</td>
       <td>...</td>
-      <td>0.130616</td>
-      <td>0.000263</td>
-      <td>7528.268688</td>
-      <td>19.056202</td>
-      <td>0.239613</td>
-      <td>0.000411</td>
-      <td>701.806586</td>
-      <td>8.398407</td>
-      <td>0.022338</td>
-      <td>0.000263</td>
+      <td>0.130615</td>
+      <td>0.000264</td>
+      <td>7528.184663</td>
+      <td>19.022584</td>
+      <td>0.239615</td>
+      <td>0.000410</td>
+      <td>701.843256</td>
+      <td>8.427065</td>
+      <td>0.022337</td>
+      <td>0.000262</td>
     </tr>
     <tr>
       <th>2</th>
       <td>America</td>
-      <td>2279.452116</td>
-      <td>13.665980</td>
-      <td>0.072545</td>
+      <td>2279.479512</td>
+      <td>13.646287</td>
+      <td>0.072546</td>
       <td>0.000296</td>
-      <td>9073.852851</td>
-      <td>22.370166</td>
-      <td>0.288832</td>
+      <td>9073.848202</td>
+      <td>22.324591</td>
+      <td>0.288830</td>
       <td>0.000640</td>
-      <td>2340.340388</td>
+      <td>2340.384072</td>
       <td>...</td>
-      <td>0.130328</td>
-      <td>0.000508</td>
-      <td>7353.291098</td>
-      <td>18.447601</td>
-      <td>0.234075</td>
-      <td>0.000648</td>
-      <td>629.951208</td>
-      <td>4.814988</td>
-      <td>0.020054</td>
-      <td>0.000163</td>
+      <td>0.130327</td>
+      <td>0.000510</td>
+      <td>7353.327546</td>
+      <td>18.340678</td>
+      <td>0.234071</td>
+      <td>0.000650</td>
+      <td>629.968324</td>
+      <td>4.818990</td>
+      <td>0.020055</td>
+      <td>0.000164</td>
     </tr>
     <tr>
       <th>3</th>
       <td>CentralAsiaSiberia</td>
-      <td>2237.111942</td>
-      <td>12.332253</td>
-      <td>0.072000</td>
-      <td>0.000390</td>
-      <td>8997.895936</td>
-      <td>30.425109</td>
-      <td>0.289562</td>
-      <td>0.000508</td>
-      <td>2257.218949</td>
+      <td>2237.162577</td>
+      <td>12.379645</td>
+      <td>0.071999</td>
+      <td>0.000389</td>
+      <td>8998.013379</td>
+      <td>30.524348</td>
+      <td>0.289559</td>
+      <td>0.000507</td>
+      <td>2257.203989</td>
       <td>...</td>
       <td>0.130790</td>
-      <td>0.000518</td>
-      <td>7341.415279</td>
-      <td>28.091454</td>
-      <td>0.236262</td>
-      <td>0.000649</td>
-      <td>642.054852</td>
-      <td>10.477465</td>
-      <td>0.020661</td>
-      <td>0.000330</td>
+      <td>0.000516</td>
+      <td>7341.550015</td>
+      <td>27.956112</td>
+      <td>0.236260</td>
+      <td>0.000651</td>
+      <td>642.077081</td>
+      <td>10.482383</td>
+      <td>0.020663</td>
+      <td>0.000331</td>
     </tr>
     <tr>
       <th>4</th>
       <td>EastAsia</td>
-      <td>2263.411816</td>
-      <td>10.863106</td>
-      <td>0.072843</td>
-      <td>0.000254</td>
-      <td>9009.860431</td>
-      <td>25.460815</td>
-      <td>0.289991</td>
-      <td>0.000418</td>
-      <td>2305.851074</td>
+      <td>2263.403683</td>
+      <td>10.881792</td>
+      <td>0.072842</td>
+      <td>0.000255</td>
+      <td>9009.674924</td>
+      <td>25.473241</td>
+      <td>0.289992</td>
+      <td>0.000417</td>
+      <td>2305.840201</td>
       <td>...</td>
-      <td>0.130895</td>
-      <td>0.000337</td>
-      <td>7252.955436</td>
-      <td>19.796597</td>
-      <td>0.233451</td>
-      <td>0.000397</td>
-      <td>591.156896</td>
-      <td>4.478554</td>
-      <td>0.019028</td>
+      <td>0.130894</td>
+      <td>0.000339</td>
+      <td>7252.853820</td>
+      <td>19.848167</td>
+      <td>0.233453</td>
+      <td>0.000399</td>
+      <td>591.156990</td>
+      <td>4.472141</td>
+      <td>0.019027</td>
       <td>0.000139</td>
     </tr>
   </tbody>
@@ -2565,8 +3115,8 @@ derivedalleles_9mutspectrum_perreg_df
 
 
 
-<a name="SupTab8"></a>
-#### SI Tab 8
+<a name="SupTab11"></a>
+#### SI Tab 11
 
 
 ```r
@@ -2607,7 +3157,7 @@ linear_model_table(list(mutation_spectrum_mean_len_perind(), deCODE_mutation_spe
     spread(stat, value) %>%
     select(coefficient, mutation, data_set, estimate, std, t_val, p_val) -> linearmodels_SGDP_deCODE
     
-write.table(linearmodels_SGDP_deCODE, "SITab8.txt", quote = FALSE, sep = "\t", row.names = FALSE)
+write.table(linearmodels_SGDP_deCODE, "SITab11.txt", quote = FALSE, sep = "\t", row.names = FALSE)
 
 linearmodels_SGDP_deCODE
 ```
@@ -2688,8 +3238,8 @@ linearmodels_SGDP_deCODE
     36  3.791126e-37
 
 
-<a name="SupTab9"></a>
-#### SI Tab 9
+<a name="SupTab12"></a>
+#### SI Tab 12
 
 
 ```python
@@ -2799,7 +3349,7 @@ derivedalleles_perind_X
 
 
 ```python
-derivedalleles_perreg_X = boot_per_region(derivedalleles_perind_X, "counts")
+derivedalleles_perreg_X = boot_perregion(derivedalleles_perind_X, regions, "counts")
 
 derivedalleles_perreg_X_df = pd.DataFrame({
     "reg"            : regions,
@@ -2809,7 +3359,7 @@ derivedalleles_perreg_X_df = pd.DataFrame({
 })
 
 
-derivedalleles_perreg_X_df.to_csv("SITab9.txt", sep='\t', index=False)
+derivedalleles_perreg_X_df.to_csv("SITab12.txt", sep='\t', index=False)
 
 derivedalleles_perreg_X_df
 ```
@@ -2846,36 +3396,36 @@ derivedalleles_perreg_X_df
       <th>0</th>
       <td>WestEurasia</td>
       <td>23</td>
-      <td>2820.211444</td>
-      <td>21.167970</td>
+      <td>2820.375522</td>
+      <td>21.199855</td>
     </tr>
     <tr>
       <th>1</th>
       <td>SouthAsia</td>
       <td>8</td>
-      <td>2911.408705</td>
-      <td>26.693350</td>
+      <td>2911.267555</td>
+      <td>26.603946</td>
     </tr>
     <tr>
       <th>2</th>
       <td>America</td>
       <td>13</td>
-      <td>2839.207196</td>
-      <td>21.725134</td>
+      <td>2839.267947</td>
+      <td>21.594724</td>
     </tr>
     <tr>
       <th>3</th>
       <td>CentralAsiaSiberia</td>
       <td>16</td>
-      <td>2818.767586</td>
-      <td>18.557907</td>
+      <td>2818.791906</td>
+      <td>18.535020</td>
     </tr>
     <tr>
       <th>4</th>
       <td>EastAsia</td>
       <td>20</td>
-      <td>2900.352308</td>
-      <td>17.458597</td>
+      <td>2900.521820</td>
+      <td>17.358355</td>
     </tr>
   </tbody>
 </table>
@@ -2883,8 +3433,8 @@ derivedalleles_perreg_X_df
 
 
 
-<a name="SupTab10"></a>
-#### SI Tab 10
+<a name="SupTab13"></a>
+#### SI Tab 13
 
 
 ```python
@@ -2994,7 +3544,7 @@ derivedalleles_perind_Y
 
 
 ```python
-derivedalleles_perreg_Y = boot_per_region(derivedalleles_perind_Y, "counts")
+derivedalleles_perreg_Y = boot_perregion(derivedalleles_perind_Y, regions, "counts")
 
 derivedalleles_perreg_Y_df = pd.DataFrame({
     "reg"            : regions,
@@ -3004,7 +3554,7 @@ derivedalleles_perreg_Y_df = pd.DataFrame({
 })
 
 
-derivedalleles_perreg_Y_df.to_csv("SITab10.txt", sep='\t', index=False)
+derivedalleles_perreg_Y_df.to_csv("SITab13.txt", sep='\t', index=False)
 
 derivedalleles_perreg_Y_df
 ```
@@ -3041,36 +3591,36 @@ derivedalleles_perreg_Y_df
       <th>0</th>
       <td>WestEurasia</td>
       <td>45</td>
-      <td>164.953813</td>
-      <td>1.348469</td>
+      <td>164.958007</td>
+      <td>1.354280</td>
     </tr>
     <tr>
       <th>1</th>
       <td>SouthAsia</td>
       <td>31</td>
-      <td>164.167675</td>
-      <td>1.742188</td>
+      <td>164.158398</td>
+      <td>1.739881</td>
     </tr>
     <tr>
       <th>2</th>
       <td>America</td>
       <td>7</td>
-      <td>160.278131</td>
-      <td>1.869958</td>
+      <td>160.287593</td>
+      <td>1.877820</td>
     </tr>
     <tr>
       <th>3</th>
       <td>CentralAsiaSiberia</td>
       <td>10</td>
-      <td>166.195177</td>
-      <td>1.598562</td>
+      <td>166.190675</td>
+      <td>1.591333</td>
     </tr>
     <tr>
       <th>4</th>
       <td>EastAsia</td>
       <td>25</td>
-      <td>165.195563</td>
-      <td>1.430327</td>
+      <td>165.198766</td>
+      <td>1.431433</td>
     </tr>
   </tbody>
 </table>
@@ -3162,7 +3712,9 @@ Figure1a
 ```
 
 
-![png](output_64_0.png)
+    
+![png](output_71_0.png)
+    
 
 
 ##### Figure 1b
@@ -3173,13 +3725,18 @@ Figure1a
 
 
 rbind(
-    read.table("SITab1.txt", header = T) %>% select(samples = region, mean_len_mean, mean_len_se) %>% mutate(time = 0),
-    read.table("SITab2.txt", header = T) %>% select(samples, mean_len_mean = len_mean, mean_len_se = len_se) %>% mutate(time = c(-45000, -8000, -7000))) -> ancient_extant_mean_frag_len
+    read.table("SITab2.txt", header = T) %>% select(samples = region, mean_len_mean, mean_len_se) %>% mutate(time = 0),
+    read.table("SITab3.txt", header = T) %>% select(samples, mean_len_mean = len_mean, mean_len_se = len_se) %>% mutate(time = ifelse(samples == "UstIshim", -45000, 
+                                                                                                                                  ifelse(samples == "Yana1", -39000,
+                                                                                                                                        ifelse(samples == "Sunghir3", -34000,
+                                                                                                                                              ifelse(samples == "Anzick1", -13000,
+                                                                                                                                                    ifelse(samples == "Kolyma", -10000, 
+                                                                                                                                                        ifelse(samples == "Loschbour", -8000, 
+                                                                                                                                                            ifelse(samples == "Stuttgart", -7000, 0))))))))) -> ancient_extant_mean_frag_len
 
-plot_grid(
-    ancient_extant_mean_frag_len%>%
+ancient_extant_mean_frag_len%>%
         ggplot() +
-        geom_rect(aes(xmin = -10000, xmax = 2000, ymin = 65000, ymax = 95000), color = "grey60", alpha = 0) +
+        geom_rect(aes(xmin = -12000, xmax = 2000, ymin = 65000, ymax = 105000), color = "grey60", alpha = 0) +
         geom_errorbar(data = . %>% filter(time != 0), aes(x = time, ymax = mean_len_mean+(1.96*mean_len_se), ymin = mean_len_mean-(1.96*mean_len_se))) +
         geom_point(data = . %>% filter(time != 0),    aes(x = time, y = mean_len_mean, shape = samples), size = 2) +
         geom_point(data = . %>% filter(time == 0),    aes(x = time, y = mean_len_mean, color = samples)) +
@@ -3187,7 +3744,42 @@ plot_grid(
         ylab("Mean archaic fragment\nlength log10(bp)") +
         xlab("Time since present (years)") +
         scale_color_manual(values = reg_colors) +
-        scale_shape_manual(values = c("Ust_ishim" = 18, "Loschbour" = 17, "Stuttgart" = 4)) +
+        scale_shape_manual(values = c("UstIshim" = 18, "Yana1" = 16, "Sunghir3" = 15, "Kolyma" = 14, "Loschbour" = 17, "Stuttgart" = 4)) +
+        theme(legend.position = "none")
+```
+
+
+    
+![png](output_73_0.png)
+    
+
+
+
+```r
+%%R
+
+
+rbind(
+    read.table("SITab2.txt", header = T) %>% select(samples = region, mean_len_mean, mean_len_se) %>% mutate(time = 0),
+    read.table("SITab3.txt", header = T) %>% select(samples, mean_len_mean = len_mean, mean_len_se = len_se) %>% mutate(time = ifelse(samples == "UstIshim", -45000, 
+                                                                                                                                  ifelse(samples == "Yana1", -39000,
+                                                                                                                                        ifelse(samples == "Sunghir3", -34000,
+                                                                                                                                              ifelse(samples == "Anzick1", -13000,
+                                                                                                                                                    ifelse(samples == "Kolyma", -10000, 
+                                                                                                                                                        ifelse(samples == "Loschbour", -8000, 
+                                                                                                                                                            ifelse(samples == "Stuttgart", -7000, 0))))))))) -> ancient_extant_mean_frag_len
+plot_grid(
+    ancient_extant_mean_frag_len%>%
+        ggplot() +
+        geom_rect(aes(xmin = -12000, xmax = 2000, ymin = 65000, ymax = 105000), color = "grey60", alpha = 0) +
+        geom_errorbar(data = . %>% filter(time != 0), aes(x = time, ymax = mean_len_mean+(1.96*mean_len_se), ymin = mean_len_mean-(1.96*mean_len_se))) +
+        geom_point(data = . %>% filter(time != 0),    aes(x = time, y = mean_len_mean, shape = samples), size = 2) +
+        geom_point(data = . %>% filter(time == 0),    aes(x = time, y = mean_len_mean, color = samples)) +
+        scale_y_continuous(trans = "log10") +
+        ylab("Mean archaic fragment\nlength log10(bp)") +
+        xlab("Time since present (years)") +
+        scale_color_manual(values = reg_colors) +
+        scale_shape_manual(values = c("UstIshim" = 18, "Yana1" = 16, "Sunghir3" = 15, "Kolyma" = 14, "Loschbour" = 17, "Stuttgart" = 4)) +
         theme(legend.position = "none"),
     
     NULL,
@@ -3198,14 +3790,13 @@ plot_grid(
         geom_violin(aes(x = region,  y = mean_len, fill = region, color = region), alpha = 0.2, draw_quantiles = c(0.5)) +
         geom_dotplot(aes(x = region, y = mean_len, fill = region),                 binaxis = "y", stackdir='center', alpha = 0.5,
                         binwidth = round((max(archaicfragmentstatisticsperind()$mean_len)-min(archaicfragmentstatisticsperind()$mean_len))/50, digits = 0)) +
-        geom_errorbar(data = ancient_extant_mean_frag_len %>% filter(samples != "Ust_ishim"), aes(x = samples, ymin = mean_len_mean-(1.96*mean_len_se), ymax = mean_len_mean+(1.96*mean_len_se)), width = 0.25) + 
-        geom_point(   data = ancient_extant_mean_frag_len %>% filter(time == 0), aes(x = samples, y = mean_len_mean, fill = samples),                                                 color = "black", shape = 22, size = 2) +
-        geom_point(   data = ancient_extant_mean_frag_len %>% filter(time == 0), aes(x = samples, y = mean_len_mean, fill = samples),                                                 color = "black", shape = 22, size = 2) +
-        geom_point(   data = ancient_extant_mean_frag_len %>% filter(time != 0, time > -45000), aes(x = samples, y = mean_len_mean, shape = samples),                                 color = "black",             size = 2) +
-        scale_x_discrete(limits = c("Loschbour", "Stuttgart", "WestEurasia", "SouthAsia", "America", "CentralAsiaSiberia", "EastAsia")) +
+        geom_errorbar(data = ancient_extant_mean_frag_len %>% filter(time > -14000), aes(x = samples, ymin = mean_len_mean-(1.96*mean_len_se), ymax = mean_len_mean+(1.96*mean_len_se)), width = 0.25) + 
+        geom_point(   data = ancient_extant_mean_frag_len %>% filter(time == 0),     aes(x = samples, y = mean_len_mean, fill = samples),                                                 color = "black", shape = 22, size = 2) +
+        geom_point(   data = ancient_extant_mean_frag_len %>% filter(time != 0, time > -14000), aes(x = samples, y = mean_len_mean, shape = samples),                                 color = "black",             size = 2) +
+        scale_x_discrete(limits = c("Kolyma", "Loschbour", "Stuttgart", "WestEurasia", "SouthAsia", "America", "CentralAsiaSiberia", "EastAsia")) +
         scale_fill_manual(values  = reg_colors) +
         scale_color_manual(values = reg_colors) +
-        scale_shape_manual(values = c("Ust_ishim" = 18, "Loschbour" = 17, "Stuttgart" = 4)) +
+        scale_shape_manual(values = c("UstIshim" = 18, "Yana1" = 16, "Sunghir3" = 15, "Kolyma" = 14, "Loschbour" = 17, "Stuttgart" = 4)) +
         theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(),  plot.background = element_rect(colour = "grey60")) +
         ylab("Mean archaic\nfragment length (bp)"),
     
@@ -3215,7 +3806,9 @@ Figure1b
 ```
 
 
-![png](output_66_0.png)
+    
+![png](output_74_0.png)
+    
 
 
 ##### Figure 1c and d
@@ -3231,8 +3824,8 @@ plot_grid(
         geom_violin(aes(x = region,  y = num_frag, fill = region, color = region), alpha = 0.2, draw_quantiles = c(0.5)) +
         geom_dotplot(aes(x = region, y = num_frag, fill = region),                 binaxis = "y", stackdir='center', alpha = 0.5,
                         binwidth = round((max(archaicfragmentstatisticsperind()$num_frag)-min(archaicfragmentstatisticsperind()$num_frag))/50, digits = 0)) +
-        geom_errorbar(data = read.table("SITab1.txt", header = T), aes(x = region, ymin = n_frag_mean-(1.96*n_frag_se), ymax = n_frag_mean+(1.96*n_frag_se)), width = 0.25) + 
-        geom_point(   data = read.table("SITab1.txt", header = T), aes(x = region, y = n_frag_mean, fill = region),                                                 color = "black", shape = 22, size = 2) +
+        geom_errorbar(data = read.table("SITab2.txt", header = T), aes(x = region, ymin = n_frag_mean-(1.96*n_frag_se), ymax = n_frag_mean+(1.96*n_frag_se)), width = 0.25) + 
+        geom_point(   data = read.table("SITab2.txt", header = T), aes(x = region, y = n_frag_mean, fill = region),                                                 color = "black", shape = 22, size = 2) +
         scale_fill_manual(values  = reg_colors) +
         scale_color_manual(values = reg_colors) +
         theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(),
@@ -3244,8 +3837,8 @@ plot_grid(
         geom_violin(aes(x = region,  y = arch_seq, fill = region, color = region), alpha = 0.2, draw_quantiles = c(0.5)) +
         geom_dotplot(aes(x = region, y = arch_seq, fill = region),                 binaxis = "y", stackdir='center', alpha = 0.5,
                         binwidth = round((max(archaicfragmentstatisticsperind()$arch_seq)-min(archaicfragmentstatisticsperind()$arch_seq))/50, digits = 0)) +
-        geom_errorbar(data = read.table("SITab1.txt", header = T), aes(x = region, ymin = arch_seq_mean-(1.96*arch_seq_se), ymax = arch_seq_mean+(1.96*arch_seq_se)), width = 0.25) + 
-        geom_point(   data = read.table("SITab1.txt", header = T), aes(x = region, y = arch_seq_mean, fill = region),                                                 color = "black", shape = 22, size = 2) +
+        geom_errorbar(data = read.table("SITab2.txt", header = T), aes(x = region, ymin = arch_seq_mean-(1.96*arch_seq_se), ymax = arch_seq_mean+(1.96*arch_seq_se)), width = 0.25) + 
+        geom_point(   data = read.table("SITab2.txt", header = T), aes(x = region, y = arch_seq_mean, fill = region),                                                 color = "black", shape = 22, size = 2) +
         scale_fill_manual(values  = reg_colors) +
         scale_color_manual(values = reg_colors) +
         theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(),
@@ -3258,7 +3851,9 @@ Figure1cd
 ```
 
 
-![png](output_68_0.png)
+    
+![png](output_76_0.png)
+    
 
 
 
@@ -3275,7 +3870,9 @@ Figure1
 ```
 
 
-![png](output_69_0.png)
+    
+![png](output_77_0.png)
+    
 
 
 <a name="MaiFig2"></a>
@@ -3286,9 +3883,9 @@ Figure1
 ```r
 %%R
 
-read.table("SITab3.txt", header = T) %>% filter(type == "Shared", region == "WestEurasia") %>% pull(arch_seq) -> shared_seq
-read.table("SITab3.txt", header = T) %>% filter(type == "Private", region == "WestEurasia") %>% pull(arch_seq) -> private_seq_WE
-read.table("SITab3.txt", header = T) %>% filter(type == "Private", region == "EastAsia") %>% pull(arch_seq) -> private_seq_EA
+read.table("SITab6.txt", header = T) %>% filter(type == "Shared", region == "WestEurasia") %>% pull(arch_seq) -> shared_seq
+read.table("SITab6.txt", header = T) %>% filter(type == "Private", region == "WestEurasia") %>% pull(arch_seq) -> private_seq_WE
+read.table("SITab6.txt", header = T) %>% filter(type == "Private", region == "EastAsia") %>% pull(arch_seq) -> private_seq_EA
 
 data.frame(archseq = c(private_seq_EA, private_seq_WE, shared_seq,    shared_seq),
            region  = c(    "EastAsia",  "WestEurasia", "EastAsia", "WestEurasia"),
@@ -3308,7 +3905,9 @@ Figure2a
 ```
 
 
-![png](output_71_0.png)
+    
+![png](output_79_0.png)
+    
 
 
 ##### Figure 2b
@@ -3327,19 +3926,21 @@ archfrag_ind_shared_WEEA %>%
     geom_violin(aes(x = region,  y = mean_len, fill = region, color = region), alpha = 0.2, draw_quantiles = c(0.5)) +
     geom_dotplot(aes(x = region, y = mean_len, fill = region),                 binaxis = "y", stackdir='center', alpha = 0.5,
                     binwidth = round((max(archfrag_ind_shared_WEEA$mean_len)-min(archfrag_ind_shared_WEEA$mean_len))/50, digits = 0)) +
-    geom_errorbar(data = read.table("SITab4.txt", header = T) %>% filter(type == "Shared"), aes(x = region, ymin = mean_len_mean-(1.96*mean_len_se), ymax = mean_len_mean+(1.96*mean_len_se)), width = 0.25) +
-    geom_point(   data = read.table("SITab4.txt", header = T) %>% filter(type == "Shared"), aes(x = region, y = mean_len_mean, fill = region),                                                 color = "black", shape = 22, size = 2) +
+    geom_errorbar(data = read.table("SITab7.txt", header = T) %>% filter(type == "Shared"), aes(x = region, ymin = mean_len_mean-(1.96*mean_len_se), ymax = mean_len_mean+(1.96*mean_len_se)), width = 0.25) +
+    geom_point(   data = read.table("SITab7.txt", header = T) %>% filter(type == "Shared"), aes(x = region, y = mean_len_mean, fill = region),                                                 color = "black", shape = 22, size = 2) +
     scale_fill_manual(values  = reg_colors) +
     scale_color_manual(values = reg_colors) +
     theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(),
-          legend.position = "none", , axis.ticks.x = element_blank(), axis.title.x = element_blank(), axis.text.x = element_blank()) +
+          legend.position = "none", axis.ticks.x = element_blank(), axis.title.x = element_blank(), axis.text.x = element_blank()) +
     ylab("Mean shared archaic\n fragment length (bp)") -> Figure2b
 
 Figure2b
 ```
 
 
-![png](output_73_0.png)
+    
+![png](output_81_0.png)
+    
 
 
 ##### Figure 2c
@@ -3386,7 +3987,9 @@ main
 ```
 
 
-![png](output_76_0.png)
+    
+![png](output_84_0.png)
+    
 
 
 
@@ -3400,7 +4003,9 @@ insert
 ```
 
 
-![png](output_77_0.png)
+    
+![png](output_85_0.png)
+    
 
 
 
@@ -3413,7 +4018,9 @@ Figure2c
 ```
 
 
-![png](output_78_0.png)
+    
+![png](output_86_0.png)
+    
 
 
 
@@ -3432,7 +4039,9 @@ Figure2
 ```
 
 
-![png](output_79_0.png)
+    
+![png](output_87_0.png)
+    
 
 
 <a name="MaiFig3"></a>
@@ -3460,14 +4069,16 @@ read.table("Data2_mutation_spectrum.txt", header = T) %>%
           panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) +
     scale_color_manual(values = reg_colors)+
     scale_fill_manual(values = reg_colors) + 
-    geom_errorbar(data = read.table("SITab6.txt", header =  T), aes(x = reg, ymin = derallele_mean-(1.96*derallele_se), ymax = derallele_mean+(1.96*derallele_se)), width = 0.25, size = 0.5) +
-    geom_point(data = read.table("SITab6.txt", header =  T), aes(x = reg, y = derallele_mean, fill = reg), color = "black", size = 2, shape = 22) -> Figure3a
+    geom_errorbar(data = read.table("SITab9.txt", header =  T), aes(x = reg, ymin = derallele_mean-(1.96*derallele_se), ymax = derallele_mean+(1.96*derallele_se)), width = 0.25, size = 0.5) +
+    geom_point(data = read.table("SITab9.txt", header =  T), aes(x = reg, y = derallele_mean, fill = reg), color = "black", size = 2, shape = 22) -> Figure3a
 
 Figure3a
 ```
 
 
-![png](output_81_0.png)
+    
+![png](output_89_0.png)
+    
 
 
 ##### Figure 3b
@@ -3526,7 +4137,7 @@ plot_SGDP_corr <- function(m){
     
     #Returns the correlation between mutation spectrum fraction and the mean archaic fragment length plot for the SGDP data
     
-    read.table("SITab7.txt", header = T) %>% 
+    read.table("SITab10.txt", header = T) %>% 
     gather("mut_stat", "value", 2:37) %>%
     separate(mut_stat, c("mutation", "countfrac", "stat"), sep = "_") %>%
     filter(countfrac == "frac") %>%
@@ -3534,7 +4145,7 @@ plot_SGDP_corr <- function(m){
     mutate(mutation = str_replace(mutation, "\\.", ">"),
             stat = ifelse(stat == "mean", "frac_mean", "frac_se")) %>%
     spread(stat, value) %>%
-    full_join(read.table("SITab1.txt", header = T) %>% select(reg = region, mean_len_mean, mean_len_se), by = c("reg")) %>%
+    full_join(read.table("SITab2.txt", header = T) %>% select(reg = region, mean_len_mean, mean_len_se), by = c("reg")) %>%
     filter(mutation == m) -> mutation_spectrum_mean_len_perreg
     
     mutation_spectrum_mean_len_perind() %>%
@@ -3593,7 +4204,7 @@ max_min_deCODE <- function(mut){
         pull(diff) %>%
         max() -> max_diff_SGDP
     
-    read.table("SITab8.txt", header = T) %>%
+    read.table("SITab11.txt", header = T) %>%
         filter(data_set == "deCODE") %>%
         select(coefficient, mutation, estimate) %>%
         spread(coefficient, estimate) %>%
@@ -3638,7 +4249,9 @@ Figure3b
 ```
 
 
-![png](output_86_0.png)
+    
+![png](output_94_0.png)
+    
 
 
 
@@ -3655,7 +4268,9 @@ Figure3
 ```
 
 
-![png](output_87_0.png)
+    
+![png](output_95_0.png)
+    
 
 
 <a name="MaiFig4"></a>
@@ -4086,42 +4701,42 @@ X_to_A_ratio_perreg_df
     <tr>
       <th>0</th>
       <td>WestEurasia</td>
-      <td>0.820266</td>
-      <td>0.007241</td>
-      <td>73911.865042</td>
-      <td>651.231118</td>
+      <td>0.820304</td>
+      <td>0.007203</td>
+      <td>73911.473602</td>
+      <td>647.662843</td>
     </tr>
     <tr>
       <th>1</th>
       <td>SouthAsia</td>
-      <td>0.846917</td>
-      <td>0.007682</td>
-      <td>73268.120494</td>
-      <td>942.331088</td>
+      <td>0.846987</td>
+      <td>0.007702</td>
+      <td>73268.441894</td>
+      <td>942.262390</td>
     </tr>
     <tr>
       <th>2</th>
       <td>America</td>
-      <td>0.825819</td>
-      <td>0.005881</td>
-      <td>80298.373739</td>
-      <td>700.893123</td>
+      <td>0.825802</td>
+      <td>0.005845</td>
+      <td>80300.900063</td>
+      <td>700.142358</td>
     </tr>
     <tr>
       <th>3</th>
       <td>CentralAsiaSiberia</td>
-      <td>0.833723</td>
-      <td>0.005097</td>
-      <td>81931.591682</td>
-      <td>639.871784</td>
+      <td>0.833722</td>
+      <td>0.005088</td>
+      <td>81934.632043</td>
+      <td>639.378369</td>
     </tr>
     <tr>
       <th>4</th>
       <td>EastAsia</td>
-      <td>0.856051</td>
-      <td>0.004925</td>
-      <td>81589.618006</td>
-      <td>613.829734</td>
+      <td>0.856058</td>
+      <td>0.004910</td>
+      <td>81586.849607</td>
+      <td>611.433929</td>
     </tr>
   </tbody>
 </table>
@@ -4150,7 +4765,9 @@ Fig4a
 ```
 
 
-![png](output_93_0.png)
+    
+![png](output_101_0.png)
+    
 
 
 ##### Figure 4b
@@ -4363,32 +4980,32 @@ CGenrichment_perreg_df
     <tr>
       <th>0</th>
       <td>WestEurasia</td>
-      <td>1.366715</td>
-      <td>0.008523</td>
+      <td>1.366740</td>
+      <td>0.008577</td>
     </tr>
     <tr>
       <th>1</th>
       <td>SouthAsia</td>
-      <td>1.385213</td>
-      <td>0.008980</td>
+      <td>1.385192</td>
+      <td>0.008972</td>
     </tr>
     <tr>
       <th>2</th>
       <td>America</td>
-      <td>1.433243</td>
-      <td>0.014961</td>
+      <td>1.433314</td>
+      <td>0.014913</td>
     </tr>
     <tr>
       <th>3</th>
       <td>CentralAsiaSiberia</td>
-      <td>1.387306</td>
-      <td>0.011183</td>
+      <td>1.387291</td>
+      <td>0.011162</td>
     </tr>
     <tr>
       <th>4</th>
       <td>EastAsia</td>
-      <td>1.396635</td>
-      <td>0.010532</td>
+      <td>1.396747</td>
+      <td>0.010538</td>
     </tr>
   </tbody>
 </table>
@@ -4405,11 +5022,11 @@ CGenrichment_perind() %>%
     full_join(archaicfragmentstatisticsperind() %>% select(ind = name, mean_len), by = c("ind")) %>%
     ggplot() +
     geom_point(aes(x = mean_len, y = ratio, color = reg), alpha = 0.5) +
-    geom_errorbar( data = CGenrichment_perreg_df %>% full_join(read.table("SITab1.txt", header = T) %>% select(reg = region, mean_len_mean, mean_len_se), by = c("reg")), 
+    geom_errorbar( data = CGenrichment_perreg_df %>% full_join(read.table("SITab2.txt", header = T) %>% select(reg = region, mean_len_mean, mean_len_se), by = c("reg")), 
                   aes(ymin = ratio_mean-(1.96*ratio_se),       ymax = ratio_mean+(1.96*ratio_se),       x = mean_len_mean)) +
-    geom_errorbarh(data = CGenrichment_perreg_df %>% full_join(read.table("SITab1.txt", header = T) %>% select(reg = region, mean_len_mean, mean_len_se), by = c("reg")), 
+    geom_errorbarh(data = CGenrichment_perreg_df %>% full_join(read.table("SITab2.txt", header = T) %>% select(reg = region, mean_len_mean, mean_len_se), by = c("reg")), 
                    aes(xmin = mean_len_mean-(1.96*mean_len_se), xmax = mean_len_mean+(1.96*mean_len_se), y = ratio_mean), height = .0015) +
-    geom_point(    data = CGenrichment_perreg_df %>% full_join(read.table("SITab1.txt", header = T) %>% select(reg = region, mean_len_mean, mean_len_se), by = c("reg")) ,
+    geom_point(    data = CGenrichment_perreg_df %>% full_join(read.table("SITab2.txt", header = T) %>% select(reg = region, mean_len_mean, mean_len_se), by = c("reg")) ,
                    aes(x = mean_len_mean, y = ratio_mean, fill = reg), size = 3, shape = 22) +
     scale_color_manual(values = reg_colors) +
     scale_fill_manual(values = reg_colors) +
@@ -4422,7 +5039,9 @@ Fig4b
 ```
 
 
-![png](output_98_0.png)
+    
+![png](output_106_0.png)
+    
 
 
 
@@ -4436,7 +5055,9 @@ Fig4
 ```
 
 
-![png](output_99_0.png)
+    
+![png](output_107_0.png)
+    
 
 
 [<img src="arrow.png" width="100" style="float: left;">](#HomeHome) &nbsp;
@@ -4468,7 +5089,9 @@ ExtFig1
 ```
 
 
-![png](output_101_0.png)
+    
+![png](output_109_0.png)
+    
 
 
 <a name="ExtFig2"></a>
@@ -4511,7 +5134,9 @@ ExtFig2a
 ```
 
 
-![png](output_103_0.png)
+    
+![png](output_111_0.png)
+    
 
 
 ##### Extended Figure 2b
@@ -4558,7 +5183,9 @@ ExtFig2b
 ```
 
 
-![png](output_105_0.png)
+    
+![png](output_113_0.png)
+    
 
 
 ##### Extended Figure 2c
@@ -4596,7 +5223,9 @@ ExtFig2c
 ```
 
 
-![png](output_107_0.png)
+    
+![png](output_115_0.png)
+    
 
 
 ##### Extended Figure 2d
@@ -4636,7 +5265,9 @@ ExtFig2d
 ```
 
 
-![png](output_109_0.png)
+    
+![png](output_117_0.png)
+    
 
 
 
@@ -4651,7 +5282,9 @@ ExtFig2
 ```
 
 
-![png](output_110_0.png)
+    
+![png](output_118_0.png)
+    
 
 
 <a name="ExtFig3"></a>
@@ -4769,7 +5402,9 @@ ExtFig3
 ```
 
 
-![png](output_115_0.png)
+    
+![png](output_123_0.png)
+    
 
 
 [<img src="arrow.png" width="100" style="float: left;">](#HomeHome) &nbsp;
@@ -4786,24 +5421,29 @@ ExtFig3
 ```r
 %%R -w 1000 -h 1000
 
+
 read.table("Data1_archaicfragments.txt", header = T) %>%
-    filter(name %in% c("Ust_ishim", "Loschbour", "Stuttgart")) %>%
+    filter(name %in% c("UstIshim", "Yana1", "Sunghir3", "Kolyma", "Loschbour", "Stuttgart")) %>%
     mutate(chrom = -1*as.numeric(factor(chrom, c(as.character(1:22), "X"))),
-           chrom = ifelse(name == "Ust_ishim", chrom-0.5, ifelse(name == "Loschbour", chrom-0.25, chrom))) %>%
+           chrom = ifelse(name == "UstIshim", chrom, ifelse(name == "Yana1", chrom-0.125, ifelse(name == "Sunghir3", chrom-0.25, ifelse(name == "Kolyma", chrom-0.375, ifelse(name == "Loschbour", chrom-0.5, ifelse(name == "Stuttgart", chrom-0.625, chrom))))))) %>% 
     ggplot() +
-    geom_rect(aes(xmin = start, xmax = end, ymin = chrom, ymax = chrom-0.25, fill = name)) +
+    geom_rect(aes(xmin = start, xmax = end, ymin = chrom, ymax = chrom-0.125, fill = name)) +
     geom_rect(data = non_callable, aes(xmin = start, xmax = end, ymin = chrom, ymax = chrom-0.75), fill = "gray") +
-    geom_segment(data = chrom_len, aes(x = 0,    xend = chrom_len, y    = chrom-0.25, yend = chrom-0.25),  color = "gray") +
-    geom_segment(data = chrom_len, aes(x = 0,    xend = chrom_len, y    = chrom-0.50, yend = chrom-0.50) , color = "gray") +
+    geom_segment(data = chrom_len, aes(x = 0,    xend = chrom_len, y    = chrom-0.125, yend = chrom-0.125),  color = "gray") +
+    geom_segment(data = chrom_len, aes(x = 0,    xend = chrom_len, y    = chrom-0.25,  yend = chrom-0.25) , color = "gray") +
+    geom_segment(data = chrom_len, aes(x = 0,    xend = chrom_len, y    = chrom-0.375, yend = chrom-0.375),  color = "gray") +
+    geom_segment(data = chrom_len, aes(x = 0,    xend = chrom_len, y    = chrom-0.50,  yend = chrom-0.50) , color = "gray") +
+    geom_segment(data = chrom_len, aes(x = 0,    xend = chrom_len, y    = chrom-0.625, yend = chrom-0.625) , color = "gray") +
     geom_rect(data    = chrom_len, aes(xmin = 0, xmax = chrom_len, ymin = chrom-0.75, ymax = chrom),       color = "black", alpha = 0) +
     theme(panel.grid = element_blank(), axis.ticks.y= element_blank(),  axis.line.x= element_line(colour = "black"), 
           panel.border = element_blank(), legend.position = c(0.75, 0.5), legend.title=element_blank()) +
     scale_y_continuous(breaks = seq(-1.375, -23.375, -1), labels = c(1:22, "X"))  +
     xlab("Position (bp)") +
     ylab("Chromosome") +
-    scale_fill_manual(values = c("Ust_ishim" = "#1D65A6", "Loschbour" = "#BED905", "Stuttgart" = "#F2A104")) -> SIFig1
+    scale_fill_manual(values = c("UstIshim" = "#072448", "Yana1" = "#54D2D2", "Sunghir3" = "#58B368", "Kolyma" = "#FFCB00", "Loschbour" = "#F8AA4B", "Stuttgart" = "#FF6150"),
+                      breaks = c("UstIshim", "Yana1", "Sunghir3", "Kolyma", "Loschbour", "Stuttgart")) -> SIFig1
 
-    SIFig1
+SIFig1
     
 ggsave("SIFig1.pdf",  width = 19, height = 19, units = "cm") 
 
@@ -4811,20 +5451,726 @@ SIFig1
 ```
 
 
-![png](output_117_0.png)
+    
+![png](output_125_0.png)
+    
 
 
 <a name="SupFig2"></a>
 #### SI Figure 2
 
-##### SI Figure 2a
+Intersect recombination blocks with archaic fragments for every individual in each population
+
+
+```bash
+%%bash
+
+awk 'BEGIN{print "chrom\tstart\tend\twindow\trec_rate\tname\tregion"}' > recombination_length_archfrag.txt
+
+for pop in "Bengali" "Dai" "Han" "Finnish" "English" "Spanish" "Japanese" "Kinh" "Punjabi" "Tuscan";
+do
+
+echo ${pop}
+
+bedtools intersect -wo -a <(cat hg19/${pop}/*_recombination_map_hapmap_format_hg19_chr_*.txt \
+                                | egrep -v "Chromosome" \
+                                | awk 'BEGIN{chrom = 0}{if(chrom != $1){print $1"\t0\t"$2"\t0";chrom = $1; start = $2}else{print $1"\t"start"\t"$2"\t"rec_rate}; start = $2; rec_rate = $3}' \
+                                | bedtools sort) \
+                        -b <(egrep -v name Data1_archaicfragments.txt \
+                                | egrep ${pop} \
+                                | awk '{print "chr"$3"\t"$4"\t"$5"\t"$1"\t"$2}' \
+                                | bedtools sort) \
+    | awk '{print $5"\t"$6"\t"$7"\t"$10"\t"$4"\t"$8"\t"$9}'| sort -k6,6 -k1,1V -k2,2n >> recombination_length_archfrag.txt
+
+done
+```
+
+    Bengali
+    Dai
+    Han
+    Finnish
+    English
+    Spanish
+    Japanese
+    Kinh
+    Punjabi
+    Tuscan
+
+
+
+```bash
+%%bash
+
+head recombination_length_archfrag.txt
+```
+
+    chrom	start	end	window	rec_rate	name	region
+    chr1	2023000	2026000	3000	0.782040651152	S_Bengali-1	SouthAsia
+    chr1	3057000	3064000	10	2.99273035728	S_Bengali-1	SouthAsia
+    chr1	3057000	3064000	130	2.88278581866	S_Bengali-1	SouthAsia
+    chr1	3057000	3064000	1353	22.0124523097	S_Bengali-1	SouthAsia
+    chr1	3057000	3064000	1913	41.539968433	S_Bengali-1	SouthAsia
+    chr1	3057000	3064000	196	3.19028454368	S_Bengali-1	SouthAsia
+    chr1	3057000	3064000	2309	1.66954413591	S_Bengali-1	SouthAsia
+    chr1	3057000	3064000	240	3.06090034239	S_Bengali-1	SouthAsia
+    chr1	3057000	3064000	403	6.77818270745	S_Bengali-1	SouthAsia
+
+
+Extact the total chromosome length in phisical and genetic distance for each population
+
+
+```bash
+%%bash
+
+awk 'BEGIN{print "pop\tchrom\tphysical_length\tgenetic_length"}' > physical_genetic_len_perchrom.txt
+
+for pop in "Bengali" "Dai" "Han" "Finnish" "English" "Spanish" "Japanese" "Kinh" "Punjabi" "Tuscan";
+do 
+    for chrom in `seq 1 22`;
+    do 
+
+        tail -n 1 hg19/${pop}/*_recombination_map_hapmap_format_hg19_chr_${chrom}.txt | awk '{print "'${pop}'\t"$1"\t"$2"\t"$4}' >> physical_genetic_len_perchrom.txt
+        
+    done;
+done 
+```
+
+
+```r
+%%R
+
+read.table("physical_genetic_len_perchrom.txt", header = T) %>%
+    group_by(chrom) %>%
+    mutate(gen_len_ratio = genetic_length/min(genetic_length)) %>%
+    select(pop, chrom, gen_len_ratio)-> gen_len_ratio_chrom
+    
+head(gen_len_ratio_chrom)
+```
+
+          pop chrom gen_len_ratio
+    1 Bengali  chr1      1.062857
+    2 Bengali  chr2      1.159219
+    3 Bengali  chr3      1.176536
+    4 Bengali  chr4      1.007053
+    5 Bengali  chr5      1.148713
+    6 Bengali  chr6      1.154604
+
+
+Scale recombination rates per chromosome minimum length and compute physical and genetic distances for each archaic fragment
+
+
+```r
+%%R
+
+read.table("recombination_length_archfrag.txt", header = T) %>% 
+    separate(name, c("a", "b"), sep = "_", remove = F) %>%
+    select(-c(a)) %>%
+    separate(b, c("pop", "a"), sep = "-") %>%
+    select(-c(a)) %>%
+    left_join(gen_len_ratio_chrom, by = c("chrom", "pop")) %>%
+    group_by(name, region, chrom, start, end) %>%
+    summarize(mean_rec_rate = sum((window*(rec_rate/gen_len_ratio))/sum(window)) ) %>%
+    mutate(physical_dist = end-start,
+           genetic_dist  = physical_dist*mean_rec_rate/1e6) %>%
+    group_by(name, region) %>%
+    summarize(mean_genetic_dist = mean(genetic_dist), mean_physical_dist = mean(physical_dist)) %>%
+    mutate(region = factor(region, levels = c("WestEurasia", "SouthAsia", "EastAsia"))) %>%
+    ungroup() -> physical_genetic_dist_archfrag
+```
+
+
+```python
+physical_genetic_dist_archfrag  = %R physical_genetic_dist_archfrag %>% rename(reg = region)
+physical_genetic_dist_archfrag
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>name</th>
+      <th>reg</th>
+      <th>mean_genetic_dist</th>
+      <th>mean_physical_dist</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>S_Bengali-1</td>
+      <td>SouthAsia</td>
+      <td>0.053308</td>
+      <td>73673.251029</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>S_Bengali-2</td>
+      <td>SouthAsia</td>
+      <td>0.055561</td>
+      <td>77558.872305</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>S_Dai-1</td>
+      <td>EastAsia</td>
+      <td>0.054927</td>
+      <td>82013.852814</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>S_Dai-2</td>
+      <td>EastAsia</td>
+      <td>0.054945</td>
+      <td>81771.604938</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>S_Dai-3</td>
+      <td>EastAsia</td>
+      <td>0.054556</td>
+      <td>79261.824324</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>S_English-1</td>
+      <td>WestEurasia</td>
+      <td>0.043062</td>
+      <td>71144.210526</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>S_English-2</td>
+      <td>WestEurasia</td>
+      <td>0.042990</td>
+      <td>69879.629630</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>S_Finnish-1</td>
+      <td>WestEurasia</td>
+      <td>0.048348</td>
+      <td>73960.921844</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>S_Finnish-2</td>
+      <td>WestEurasia</td>
+      <td>0.050669</td>
+      <td>73225.716929</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>S_Finnish-3</td>
+      <td>WestEurasia</td>
+      <td>0.051133</td>
+      <td>78566.546763</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>S_Han-1</td>
+      <td>EastAsia</td>
+      <td>0.059706</td>
+      <td>86199.664430</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>S_Han-2</td>
+      <td>EastAsia</td>
+      <td>0.055997</td>
+      <td>79949.823944</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>S_Japanese-1</td>
+      <td>EastAsia</td>
+      <td>0.054112</td>
+      <td>82203.849519</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>S_Japanese-2</td>
+      <td>EastAsia</td>
+      <td>0.054257</td>
+      <td>77278.503046</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>S_Japanese-3</td>
+      <td>EastAsia</td>
+      <td>0.057077</td>
+      <td>80978.475336</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>S_Kinh-1</td>
+      <td>EastAsia</td>
+      <td>0.056588</td>
+      <td>83751.666667</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>S_Kinh-2</td>
+      <td>EastAsia</td>
+      <td>0.058018</td>
+      <td>79603.727715</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>S_Punjabi-1</td>
+      <td>SouthAsia</td>
+      <td>0.051986</td>
+      <td>80511.705686</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>S_Punjabi-2</td>
+      <td>SouthAsia</td>
+      <td>0.049260</td>
+      <td>75603.723404</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>S_Punjabi-3</td>
+      <td>SouthAsia</td>
+      <td>0.049597</td>
+      <td>73382.978723</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>S_Punjabi-4</td>
+      <td>SouthAsia</td>
+      <td>0.048857</td>
+      <td>72587.758776</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>S_Spanish-1</td>
+      <td>WestEurasia</td>
+      <td>0.049100</td>
+      <td>77081.370450</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>S_Spanish-2</td>
+      <td>WestEurasia</td>
+      <td>0.048964</td>
+      <td>70200.841220</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>S_Tuscan-1</td>
+      <td>WestEurasia</td>
+      <td>0.050025</td>
+      <td>75153.115100</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>S_Tuscan-2</td>
+      <td>WestEurasia</td>
+      <td>0.050296</td>
+      <td>74700.111483</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+regions_physical_genetic  = ["WestEurasia", "SouthAsia", "EastAsia"]
+physical_dist_boot_result = boot_perregion(physical_genetic_dist_archfrag, regions_physical_genetic, "mean_physical_dist",  iterations = 100000)
+genetic_dist_boot_result  = boot_perregion(physical_genetic_dist_archfrag, regions_physical_genetic, "mean_genetic_dist", iterations = 100000)
+```
+
+
+```python
+physical_genetic_dist_archfrag_meanse = pd.DataFrame({"region"                  : regions_physical_genetic,
+                                                      "mean_physical_dist_mean" : physical_dist_boot_result[:, 0],
+                                                      "mean_physical_dist_se"   : physical_dist_boot_result[:, 1],
+                                                      "mean_genetic_dist_mean"  : genetic_dist_boot_result[:, 0],
+                                                      "mean_genetic_dist_se"    : genetic_dist_boot_result[:, 1]})
+
+physical_genetic_dist_archfrag_meanse
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>region</th>
+      <th>mean_physical_dist_mean</th>
+      <th>mean_physical_dist_se</th>
+      <th>mean_genetic_dist_mean</th>
+      <th>mean_genetic_dist_se</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>WestEurasia</td>
+      <td>73768.830156</td>
+      <td>939.712826</td>
+      <td>0.048283</td>
+      <td>0.000979</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>SouthAsia</td>
+      <td>75553.057378</td>
+      <td>1125.278347</td>
+      <td>0.051428</td>
+      <td>0.000993</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>EastAsia</td>
+      <td>81301.706748</td>
+      <td>751.704948</td>
+      <td>0.056021</td>
+      <td>0.000551</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```r
+%%R -i physical_genetic_dist_archfrag_meanse
+
+plot_grid(
+
+    physical_genetic_dist_archfrag %>%
+        ggplot() +
+        geom_violin(aes(x = region,  y = mean_physical_dist, fill = region, color = region), alpha = 0.2, draw_quantiles = c(0.5)) +
+        geom_dotplot(aes(x = region, y = mean_physical_dist, fill = region),                 binaxis = "y", stackdir='center', alpha = 0.5) +
+        geom_errorbar(data = physical_genetic_dist_archfrag_meanse, aes(x = region, ymin = mean_physical_dist_mean-(1.96*mean_physical_dist_se), ymax = mean_physical_dist_mean+(1.96*mean_physical_dist_se)), width = 0.2) +
+        geom_point(data = physical_genetic_dist_archfrag_meanse,    aes(x = region, y = mean_physical_dist_mean, fill = region), color = "black", shape = 22, size = 2) +
+        scale_fill_manual(values  = reg_colors) +
+        scale_color_manual(values = reg_colors) +
+        theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(), legend.position = c(0.85, 0.15),
+              axis.ticks.x = element_blank(), axis.title.x = element_blank(), axis.text.x = element_blank()) +
+        ylab("Mean archaic\nfragment length (bp)") +
+        ggtitle("Phisical distance"),
+    
+    physical_genetic_dist_archfrag %>%
+        ggplot() +
+        geom_violin(aes(x = region,  y = mean_genetic_dist, fill = region, color = region), alpha = 0.2, draw_quantiles = c(0.5)) +
+        geom_dotplot(aes(x = region, y = mean_genetic_dist, fill = region),                 binaxis = "y", stackdir='center', alpha = 0.5) +
+        geom_errorbar(data = physical_genetic_dist_archfrag_meanse, aes(x = region, ymin = mean_genetic_dist_mean-(1.96*mean_genetic_dist_se), ymax = mean_genetic_dist_mean+(1.96*mean_genetic_dist_se)), width = 0.2) +
+        geom_point(data = physical_genetic_dist_archfrag_meanse,    aes(x = region, y = mean_genetic_dist_mean, fill = region), color = "black", shape = 22, size = 2) +
+        scale_fill_manual(values  = reg_colors) +
+        scale_color_manual(values = reg_colors) +
+        theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(), legend.position = c(0.85, 0.15),
+              axis.ticks.x = element_blank(), axis.title.x = element_blank(), axis.text.x = element_blank()) +
+        ylab("Mean archaic\nfragment length (cM)") +
+        ggtitle("Genetic distance, scaled genetic map"), nrow = 1, labels = "auto", label_size = 8, label_fontfamily = "Helvetica") -> SIFig2
+
+SIFig2
+    
+ggsave("SIFig2.pdf",  width = 19, height = 10, units = "cm") 
+
+SIFig2
+```
+
+    R[write to console]: `stat_bindot()` using `bins = 30`. Pick better value with `binwidth`.
+    
+    R[write to console]: `stat_bindot()` using `bins = 30`. Pick better value with `binwidth`.
+    
+
+
+
+    
+![png](output_137_1.png)
+    
+
+
+<a name="SupFig3"></a>
+#### SI Figure 3
+
+
+```r
+%%R
+
+physical_genetic_dist_archfrag %>%     
+    ggplot() +
+    geom_point(aes(x = mean_physical_dist,  y = mean_genetic_dist, fill = region, color = region), size = 2) +
+    scale_color_manual(values = reg_colors) +
+    ylab("Mean Genetic\nArchaic Fragment Length (cM)") +
+    xlab("Mean Physical\nArchaic Fragment Length (bp)") -> SIFig3
+
+SIFig3
+    
+ggsave("SIFig3.pdf",  width = 9, height = 7, units = "cm") 
+
+SIFig3
+```
+
+
+    
+![png](output_139_0.png)
+    
+
+
+<a name="SupFig4"></a>
+#### SI Figure 4
+
+
+```r
+%%R
+
+read.table("Data1_archaicfragments.txt", header = T) %>%
+    filter(region %in% c(                     "WestEurasia", "SouthAsia", "America", "CentralAsiaSiberia", "EastAsia")) %>%
+    mutate(region = factor(region, levels = c("WestEurasia", "SouthAsia", "America", "CentralAsiaSiberia", "EastAsia"))) %>%
+    mutate(pop = gsub("^S_", "", name)) %>% 
+    mutate(pop = gsub("-[0-9]*", "", pop)) %>% 
+    group_by(name, pop, region) %>%
+    summarize(mean_len = mean(length)) %>%  
+    ungroup() %>%
+    group_by(pop, region) %>%
+    summarize(mean_len_mean = mean(mean_len)) %>%
+    ungroup() %>%
+    arrange(region, mean_len_mean) %>%
+    pull(pop) -> mean_fraglen_population_order
+    
+read.table("Data1_archaicfragments.txt", header = T) %>%
+    filter(region %in% c(                     "WestEurasia", "SouthAsia", "America", "CentralAsiaSiberia", "EastAsia")) %>%
+    mutate(region = factor(region, levels = c("WestEurasia", "SouthAsia", "America", "CentralAsiaSiberia", "EastAsia"))) %>%
+    mutate(pop = gsub("^S_", "", name)) %>% 
+    mutate(pop = gsub("-[0-9]*", "", pop)) %>% 
+    group_by(name, pop, region) %>%
+    summarize(mean_len = mean(length)) %>% 
+    ungroup() %>%
+    mutate(pop = factor(pop, levels = mean_fraglen_population_order)) %>% 
+    ggplot() +
+    geom_dotplot(aes(x = as.factor(pop), y = mean_len, fill = region, group = pop), binaxis = "y", stackdir = "center", binwidth = 500, alpha = 0.75) +
+    ylab("Mean Archaic\nFragment Length (bp)") +
+    xlab("Population") +
+    scale_fill_manual(values = reg_colors) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 4), legend.position = c(0.08, 0.8), legend.background = element_blank(), legend.title = element_blank()) -> SIFig4
+
+SIFig4
+    
+ggsave("SIFig4.pdf",  width = 19, height = 10, units = "cm") 
+
+SIFig4
+```
+
+
+    
+![png](output_141_0.png)
+    
+
+
+<a name="SupFig5"></a>
+#### SI Figure 5
+
+
+```r
+%%R
+
+plot_dist_HGDP <- function(df, title){
+    df %>%
+        ggplot() +
+        geom_violin(aes(x = population,  y = value, fill = region, color = region), alpha = 0.2, draw_quantiles = c(0.5)) +
+        geom_dotplot(aes(x = population, y = value, fill = region),                 binaxis = "y", stackdir='center', alpha = 0.5) +
+        theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank()) +
+    ylab(title) +
+    xlab("")
+}
+
+read.table("Data3_HGDParchaicfragments.txt", header = T) %>%
+    group_by(name, population, region) %>%
+    summarize(n_frag = n(), total_seq = sum(length), mean_len = mean(length)) %>%
+    mutate(population = factor(population, level = c("Palestinian", "Sardinian", "Han", "Lahu"))) -> HGDParchaicfragments
+
+plot_grid(plot_dist_HGDP(HGDParchaicfragments %>% select(name, population, region, value = mean_len), "Mean Archaic\nFragment Length (bp)"),
+          plot_dist_HGDP(HGDParchaicfragments %>% select(name, population, region, value = n_frag), "Number Archaic\nFragments"),
+          plot_dist_HGDP(HGDParchaicfragments %>% select(name, population, region, value = total_seq), "Archaic\nSequence (bp)"), ncol = 1, labels = c("a", "b", "c"), label_size = 8, label_fontfamily = "Helvetica")  -> SIFig5
+
+SIFig5
+    
+ggsave("SIFig5.pdf",  width = 12, height = 15, units = "cm") 
+
+SIFig5
+```
+
+    R[write to console]: `stat_bindot()` using `bins = 30`. Pick better value with `binwidth`.
+    
+    R[write to console]: `stat_bindot()` using `bins = 30`. Pick better value with `binwidth`.
+    
+    R[write to console]: `stat_bindot()` using `bins = 30`. Pick better value with `binwidth`.
+    
+
+
+
+    
+![png](output_143_1.png)
+    
+
+
+<a name="SupFig6"></a>
+#### SI Figure 6
+
+<a name="SupFig7"></a>
+#### SI Figure 7
+
+
+```r
+%%R
+
+simulation_fragstats_twopops <- function(stat_filter, ylab_title){
+    read.table("SimulationsArchaicFragments.txt", header = T) %>% 
+        gather("stat", "value", mean_len, total_seq, n_frag) %>%
+        mutate(iteration = ifelse(pop == "EA", iteration+0.15, iteration-0.15)) %>%
+        filter(stat == stat_filter) %>%
+        ggplot() +
+        geom_point(aes(x = iteration, y = value, color = pop)) +
+        geom_errorbar(data = . %>%  group_by(scenario, iteration, stat, pop) %>% summarize(se = sd(value)/sqrt(n()), mean_value = mean(value)), 
+                          aes(x = iteration, ymin = mean_value-(se*1.96), ymax = mean_value+(se*1.96))) +
+        geom_point(data = . %>%  group_by(scenario, iteration, stat, pop) %>% summarize(value = mean(value)), aes(x = iteration, y = value, fill = pop), shape = 22, size = 2) +
+        ylab(ylab_title) +
+        labs(fill = "Populations", color = "Populations") +
+        facet_wrap(.~scenario, nrow = 1) +
+        scale_x_continuous(breaks = 0:9) +
+        theme(strip.text = element_text(size = 5,  family = "Helvetica"), axis.title.x = element_blank())
+        
+}
+
+simulation_fragstats_ratio <- function(stat_filter, ylab_title){
+
+    read.table("SimulationsArchaicFragments.txt", header = T) %>% 
+        gather("stat", "value", mean_len, total_seq, n_frag) %>%
+        filter(stat == stat_filter) %>%
+        group_by(scenario, iteration, stat, pop) %>% 
+        summarize(mean_value = mean(value)) %>%
+        spread(pop, mean_value) %>%
+        mutate(ratio = EA/WE) %>%
+        ggplot() +
+        geom_point(aes(x = iteration, y = ratio, color = "EA/WE")) +
+        geom_hline(yintercept = c(1), linetype = "dashed") +
+        ylab(ylab_title) +
+        facet_wrap(.~scenario, nrow = 1) +
+        scale_x_continuous(breaks = 0:9) +
+        scale_color_manual(values = c("black")) +
+        theme(legend.title = element_blank(), strip.text = element_text(size = 5,  family = "Helvetica"), axis.title.x = element_blank())
+}
+
+plot_grid(
+    simulation_fragstats_twopops("mean_len", "Mean Archaic\nFragment Length (bp)"),
+    simulation_fragstats_ratio("mean_len", "\nRatio"),
+    simulation_fragstats_twopops("n_frag", "Number Archaic\nFragments"),
+    simulation_fragstats_ratio("n_frag", "\nRatio"),
+    simulation_fragstats_twopops("total_seq", "Archaic\nSequence (bp)"),
+    simulation_fragstats_ratio("total_seq", "\nRatio"), 
+    ncol = 1, align = c("v"), rel_heights = c(1, 0.5, 1, 0.5, 1, 0.5), labels = c("a", "", "b", "", "c"), label_size = 8, label_fontfamily = "Helvetica") -> SIFig7
+
+SIFig7
+    
+ggsave("SIFig7.pdf",  width = 18, height = 21, units = "cm") 
+
+SIFig7
+```
+
+
+    
+![png](output_145_0.png)
+    
+
+
+<a name="SupFig8"></a>
+#### SI Figure 8
+
+
+```r
+%%R
+
+plot_grid(
+    read.table("SimulationsArchaicFragments_compare.txt", header = T) %>%
+        mutate(shared_WE = shared, shared_EA = shared) %>% 
+        select(-c(shared, WE_EA_ratio)) %>% 
+        gather("type_frag", "value", total_EA,  shared_EA, total_WE, shared_WE) %>%
+        separate(type_frag, c("totalshared", "pop"), sep = "_") %>%
+        ggplot() +
+        geom_bar(data = . %>% filter(totalshared == "total"),  stat = "identity", aes(x = iteration, y = value, fill = pop), position = position_dodge2(), alpha = 0.5, color = 1) +
+        geom_bar(data = . %>% filter(totalshared == "shared"), stat = "identity", aes(x = iteration, y = value, fill = pop), position = position_dodge2(), color = 1) +
+        facet_wrap(scenario~.) +
+        scale_x_continuous(breaks = 0:9) +
+        ylab("Joined Archaic\nSequence (bp)") +
+        theme(strip.text = element_text(size = 5,  family = "Helvetica"), axis.title.x = element_blank(), legend.title = element_blank()),
+
+
+    read.table("SimulationsArchaicFragments_compare.txt", header = T) %>% 
+        ggplot() +
+        geom_point(aes(x = iteration, y = shared_WE*100, color = "WE")) +
+        geom_point(aes(x = iteration, y = shared_EA*100, color = "EA")) +
+        facet_wrap(scenario~.) +
+        scale_x_continuous(breaks = 0:9) +
+        ylab("Shared Joined\nArchaic Sequence (%)") +
+        theme(strip.text = element_text(size = 5,  family = "Helvetica"), axis.title.x = element_blank(), legend.title = element_blank()), 
+    
+    ncol = 1, labels = c("a", "b"), align = c("v"), rel_heights = c(1, 0.5), label_size = 8, label_fontfamily = "Helvetica") -> SIFig8
+
+SIFig8
+    
+ggsave("SIFig8.pdf",  width = 18, height = 15, units = "cm") 
+
+SIFig8
+```
+
+
+    
+![png](output_147_0.png)
+    
+
+
+<a name="SupFig9"></a>
+#### SI Figure 9
+
+##### SI Figure 9a
 
 
 ```r
 %%R
 
 mutation_spectrum_pereg <- function(){
-    read.table("SITab7.txt", header = T) %>% 
+    read.table("SITab10.txt", header = T) %>% 
         gather("mut_stat", "value", 2:37) %>%
         separate(mut_stat, c("mutation", "countfrac", "stat"), sep = "_") %>%
         spread(stat, value) %>%
@@ -4843,16 +6189,18 @@ mutation_spectrum_pereg() %>%
     geom_errorbar(              aes(x = mutation, ymin = mean-(1.96*se), ymax = mean+(1.96*se), group = reg), position = position_dodge()) +
     ylab("Mean number of derived alleles") +
     theme(axis.title.x = element_blank(),panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(), legend.position = "none") +
-    scale_fill_manual(values = reg_colors) -> SIFig2a
+    scale_fill_manual(values = reg_colors) -> SIFig9a
     
-SIFig2a
+SIFig9a
 ```
 
 
-![png](output_119_0.png)
+    
+![png](output_149_0.png)
+    
 
 
-##### SI Figure 2b
+##### SI Figure 9b
 
 
 ```r
@@ -4885,73 +6233,79 @@ plot_grid(plot_mutation_spectrum_dist("T>A"),
           plot_mutation_spectrum_dist("C>G"),
           plot_mutation_spectrum_dist("CpG>TpG"),
           plot_mutation_spectrum_dist("C>T'"),
-          plot_mutation_spectrum_dist("TCC>TTC"), nrow = 3) -> SIFig2b
+          plot_mutation_spectrum_dist("TCC>TTC"), nrow = 3) -> SIFig9b
     
-SIFig2b
+SIFig9b
 ```
 
 
-![png](output_121_0.png)
+    
+![png](output_151_0.png)
+    
 
 
 
 ```r
 %%R
 
-plot_grid(SIFig2a , SIFig2b, labels = c("a", "b"), rel_heights = c(1.5, 3), ncol = 1) -> SIFig2
+plot_grid(SIFig9a , SIFig9b, labels = c("a", "b"), rel_heights = c(1.5, 3), ncol = 1) -> SIFig9
 
-SIFig2
+SIFig9
 
-ggsave("SIFig2.pdf",  width = 18, height = 20, units = "cm")
+ggsave("SIFig9.pdf",  width = 18, height = 20, units = "cm")
 
-SIFig2
+SIFig9
 ```
 
 
-![png](output_122_0.png)
+    
+![png](output_152_0.png)
+    
 
 
-<a name="SupFig3"></a>
-#### SI Figure 3
+<a name="SupFig10"></a>
+#### SI Figure 10
 
-<a name="SupFig4"></a>
-#### SI Figure 4
-
+<a name="SupFig11"></a>
+#### SI Figure 11
 
 
 ```r
 %%R
 
-read.table("SITab8.txt", header = T) %>% 
+read.table("SITab11.txt", header = T) %>% 
     filter(coefficient == "slope") %>%
     select(mutation, data_set, estimate, std) %>%
     gather("stat", "value", estimate, std) %>%
     unite("stat", data_set, stat) %>%
     spread(stat, value) %>%
     ggplot() +
+    geom_smooth(method = "lm", aes(x = SGDP_estimate, y = deCODE_estimate)) +
     geom_hline(yintercept = 0, color = "red", alpha = 0.2) +
     geom_vline(xintercept = 0, color = "red", alpha = 0.2) +
-    geom_abline(intercept = 0, slope = 1, color = "gray", linetype = "dashed") +
+    geom_abline(intercept = 0, slope = 1, color = "black", linetype = "dashed") +
     geom_errorbar( aes(x = SGDP_estimate,   ymax = deCODE_estimate+(1.96*deCODE_std), ymin = deCODE_estimate-(1.96*deCODE_std))) +
     geom_errorbarh(aes(y = deCODE_estimate, xmax = SGDP_estimate+(1.96*SGDP_std),     xmin = SGDP_estimate-(1.96*SGDP_std))) +
     geom_point(aes(x = SGDP_estimate, y = deCODE_estimate, color = mutation), size = 2) +
     theme(aspect.ratio =  1) +
     xlab("SGDP") +
-    ylab("deCODE") -> SIFig4
+    ylab("deCODE") -> SIFig11
     
-SIFig4
+SIFig11
 
-ggsave("SIFig4.pdf",  width = 8, height = 8, units = "cm")
+ggsave("SIFig11.pdf",  width = 8, height = 8, units = "cm")
 
-SIFig4
+SIFig11
 ```
 
 
-![png](output_124_0.png)
+    
+![png](output_154_0.png)
+    
 
 
-<a name="SupFig5"></a>
-#### SI Figure 5
+<a name="SupFig12"></a>
+#### SI Figure 12
 
 
 ```r
@@ -4989,21 +6343,23 @@ read.table("aau1043_DataS7.tsv", header = T, sep = "\t") %>%
   geom_text(data = . %>% summarise(mean = mean(Father_age-Mother_age)), aes(x = mean-2.5, y = 11500, label = paste("Mean = ", round(mean, digits = 2), sep = ""))) +
   geom_text(data = . %>% summarise(mean = mean(Father_age-Mother_age), sd = sd(Father_age-Mother_age)), aes(x = mean-2.5, y = 10500, label = paste("sd = ", round(sd, digits = 2), sep = ""))) +
   ylab("Counts") +
-  xlab("Father age - Mother age"), labels = "auto", nrow = 1, label_size = 8, label_fontfamily = "Helvetica") -> SIFig5
+  xlab("Father age - Mother age"), labels = "auto", nrow = 1, label_size = 8, label_fontfamily = "Helvetica") -> SIFig12
 
-SIFig5
+SIFig12
 
-ggsave("SIFig5.pdf",  width = 17, height = 7, units = "cm")
+ggsave("SIFig12.pdf",  width = 17, height = 7, units = "cm")
 
-SIFig5
+SIFig12
 ```
 
 
-![png](output_126_0.png)
+    
+![png](output_156_0.png)
+    
 
 
-<a name="SupFig6"></a>
-#### SI Figure 6
+<a name="SupFig13"></a>
+#### SI Figure 13
 
 
 ```r
@@ -5030,21 +6386,23 @@ linear_model_table(list(deCODE_mutation_spectrum_mean_age(), deCODE_mutation_spe
     geom_point(aes(x = deCODE_4_estimate, y = deCODE_0_estimate, color = mutation), size = 2) +
     theme(aspect.ratio =  1) +
     xlab("deCODE, parental age difference < 4 years") +
-    ylab("deCODE") -> SIFig6
+    ylab("deCODE") -> SIFig13
     
-SIFig6
+SIFig13
 
-ggsave("SIFig6.pdf",  width = 8, height = 8, units = "cm")
+ggsave("SIFig13.pdf",  width = 8, height = 8, units = "cm")
 
-SIFig6
+SIFig13
 ```
 
 
-![png](output_128_0.png)
+    
+![png](output_158_0.png)
+    
 
 
-<a name="SupFig7"></a>
-#### SI Figure 7
+<a name="SupFig14"></a>
+#### SI Figure 14
 
 
 ```r
@@ -5084,18 +6442,20 @@ read.table("Data2_mutation_spectrum.txt", header = T) %>%
           panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(), legend.position = "none") +
     scale_color_manual(values = reg_colors)+
     scale_fill_manual(values = reg_colors) +
-    geom_errorbar(data = read.table("SITab10.txt", header =  T), aes(x = reg, ymin = derallele_mean-(1.96*derallele_se), ymax = derallele_mean+(1.96*derallele_se)), width = 0.25, size = 0.5) +
-    geom_point(data = read.table("SITab10.txt", header =  T), aes(x = reg, y = derallele_mean, fill = reg), color = "black", size = 2, shape = 22)  -> SIFig7
+    geom_errorbar(data = read.table("SITab13.txt", header =  T), aes(x = reg, ymin = derallele_mean-(1.96*derallele_se), ymax = derallele_mean+(1.96*derallele_se)), width = 0.25, size = 0.5) +
+    geom_point(data = read.table("SITab13.txt", header =  T), aes(x = reg, y = derallele_mean, fill = reg), color = "black", size = 2, shape = 22)  -> SIFig14
 
-SIFig7
+SIFig14
     
-ggsave("SIFig7.pdf", width = 8, height = 4, units = "cm")
+ggsave("SIFig14.pdf", width = 8, height = 4, units = "cm")
 
-SIFig7
+SIFig14
 ```
 
 
-![png](output_131_0.png)
+    
+![png](output_161_0.png)
+    
 
 
 [<img src="arrow.png" width="100" style="float: left;">](#HomeHome) &nbsp;
@@ -5646,13 +7006,11 @@ print("P value = {}".format(p/100000))
 ```
 
     Fobs    = 5.73687762592627
-    P value = 0.00028
+    P value = 0.0003
 
 
 <a name="Sta6"></a>
 ### F. Difference accumulation of derived alleles among West Eurasians and East Asians
-
-
 
 
 ```python
@@ -5757,11 +7115,47 @@ print("P value = {}".format(p*2/100000))
 ```
 
     diffobs = 338.20907668231666
-    P value = 0.00118
+    P value = 0.0013
 
 
 <a name="Sta7"></a>
-### G. Difference X-to-A ratio among regions
+### G. Linear model slopes correlation between the SGDP and deCODE
+
+
+```r
+%%R
+
+read.table("SITab11.txt", header = T) %>% 
+    filter(coefficient == "slope") %>%
+    select(mutation, data_set, estimate) %>%
+    spread(data_set, estimate) %>%
+    lm(formula = deCODE~SGDP) %>%
+    summary()
+```
+
+    
+    Call:
+    lm(formula = deCODE ~ SGDP, data = .)
+    
+    Residuals:
+           Min         1Q     Median         3Q        Max 
+    -0.0004783 -0.0002236 -0.0000957  0.0001334  0.0005286 
+    
+    Coefficients:
+                  Estimate Std. Error t value Pr(>|t|)   
+    (Intercept) -1.196e-05  1.227e-04  -0.098  0.92505   
+    SGDP         1.058e+00  2.163e-01   4.892  0.00177 **
+    ---
+    Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+    
+    Residual standard error: 0.0003565 on 7 degrees of freedom
+    Multiple R-squared:  0.7737,	Adjusted R-squared:  0.7414 
+    F-statistic: 23.94 on 1 and 7 DF,  p-value: 0.001768
+    
+
+
+<a name="Sta8"></a>
+### H. Difference X-to-A ratio among regions
 
 
 ```python
@@ -5866,11 +7260,11 @@ print("P value = {}".format(p/100000))
 ```
 
     Fobs    = 5.657711298590471
-    P value = 0.00036
+    P value = 0.00044
 
 
-<a name="Sta8"></a>
-### H. Difference CGenrichment ratio among regions
+<a name="Sta9"></a>
+### I. Difference CGenrichment ratio among regions
 
 
 ```python
@@ -5975,11 +7369,11 @@ print("P value = {}".format(p/100000))
 ```
 
     Fobs    = 4.193996425536348
-    P value = 0.00277
+    P value = 0.0031
 
 
-<a name="Sta9"></a>
-### I. Difference accumulation of derived alleles on Y chromosome among regions
+<a name="Sta10"></a>
+### J. Difference accumulation of derived alleles on Y chromosome among regions
 
 
 ```python
@@ -6084,7 +7478,407 @@ print("P value = {}".format(p/100000))
 ```
 
     Fobs    = 0.6005197799166269
-    P value = 0.66369
+    P value = 0.66545
+
+
+<a name="Sta11"></a>
+### K. Adjusted R-squared for the correlation between mean archaic fragment length and fraction of TCC>TTC derived alleles
+
+
+```r
+%%R
+
+mutation_spectrum_mean_len_perind() %>% 
+    filter(mutation == "TCC>TTC") %>% 
+    mutate(mean_len = mean_len/1000) %>% 
+    lm(formula = frac~mean_len) %>%
+    summary()
+```
+
+    
+    Call:
+    lm(formula = frac ~ mean_len, data = .)
+    
+    Residuals:
+           Min         1Q     Median         3Q        Max 
+    -0.0038305 -0.0015785 -0.0001585  0.0012974  0.0066153 
+    
+    Coefficients:
+                  Estimate Std. Error t value Pr(>|t|)    
+    (Intercept)  6.051e-02  2.408e-03   25.13   <2e-16 ***
+    mean_len    -4.913e-04  3.102e-05  -15.84   <2e-16 ***
+    ---
+    Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+    
+    Residual standard error: 0.002088 on 200 degrees of freedom
+    Multiple R-squared:  0.5564,	Adjusted R-squared:  0.5542 
+    F-statistic: 250.8 on 1 and 200 DF,  p-value: < 2.2e-16
+    
+
+
+<a name="Sta12"></a>
+### L. Difference average archaic fragment length among regions in genetic and physical distances
+
+
+```python
+physical_genetic_dist_archfrag
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>name</th>
+      <th>reg</th>
+      <th>mean_genetic_dist</th>
+      <th>mean_physical_dist</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>S_Bengali-1</td>
+      <td>SouthAsia</td>
+      <td>0.053308</td>
+      <td>73673.251029</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>S_Bengali-2</td>
+      <td>SouthAsia</td>
+      <td>0.055561</td>
+      <td>77558.872305</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>S_Dai-1</td>
+      <td>EastAsia</td>
+      <td>0.054927</td>
+      <td>82013.852814</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>S_Dai-2</td>
+      <td>EastAsia</td>
+      <td>0.054945</td>
+      <td>81771.604938</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>S_Dai-3</td>
+      <td>EastAsia</td>
+      <td>0.054556</td>
+      <td>79261.824324</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>S_English-1</td>
+      <td>WestEurasia</td>
+      <td>0.043062</td>
+      <td>71144.210526</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>S_English-2</td>
+      <td>WestEurasia</td>
+      <td>0.042990</td>
+      <td>69879.629630</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>S_Finnish-1</td>
+      <td>WestEurasia</td>
+      <td>0.048348</td>
+      <td>73960.921844</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>S_Finnish-2</td>
+      <td>WestEurasia</td>
+      <td>0.050669</td>
+      <td>73225.716929</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>S_Finnish-3</td>
+      <td>WestEurasia</td>
+      <td>0.051133</td>
+      <td>78566.546763</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>S_Han-1</td>
+      <td>EastAsia</td>
+      <td>0.059706</td>
+      <td>86199.664430</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>S_Han-2</td>
+      <td>EastAsia</td>
+      <td>0.055997</td>
+      <td>79949.823944</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>S_Japanese-1</td>
+      <td>EastAsia</td>
+      <td>0.054112</td>
+      <td>82203.849519</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>S_Japanese-2</td>
+      <td>EastAsia</td>
+      <td>0.054257</td>
+      <td>77278.503046</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>S_Japanese-3</td>
+      <td>EastAsia</td>
+      <td>0.057077</td>
+      <td>80978.475336</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>S_Kinh-1</td>
+      <td>EastAsia</td>
+      <td>0.056588</td>
+      <td>83751.666667</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>S_Kinh-2</td>
+      <td>EastAsia</td>
+      <td>0.058018</td>
+      <td>79603.727715</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>S_Punjabi-1</td>
+      <td>SouthAsia</td>
+      <td>0.051986</td>
+      <td>80511.705686</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>S_Punjabi-2</td>
+      <td>SouthAsia</td>
+      <td>0.049260</td>
+      <td>75603.723404</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>S_Punjabi-3</td>
+      <td>SouthAsia</td>
+      <td>0.049597</td>
+      <td>73382.978723</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>S_Punjabi-4</td>
+      <td>SouthAsia</td>
+      <td>0.048857</td>
+      <td>72587.758776</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>S_Spanish-1</td>
+      <td>WestEurasia</td>
+      <td>0.049100</td>
+      <td>77081.370450</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>S_Spanish-2</td>
+      <td>WestEurasia</td>
+      <td>0.048964</td>
+      <td>70200.841220</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>S_Tuscan-1</td>
+      <td>WestEurasia</td>
+      <td>0.050025</td>
+      <td>75153.115100</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>S_Tuscan-2</td>
+      <td>WestEurasia</td>
+      <td>0.050296</td>
+      <td>74700.111483</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+Physical archaic fragment length difference
+
+
+```python
+Fobs, p = permutation_fstat(physical_genetic_dist_archfrag.filter(["reg", "mean_physical_dist"]).rename(columns = {"reg" : "group", "mean_physical_dist" : "value"}, inplace = False), n_perm = 100000)
+print("Fobs    = {}".format(Fobs))
+print("P value = {}".format(p/100000))
+```
+
+    Fobs    = 18.343012721876825
+    P value = 4e-05
+
+
+Genetic archaic fragment length difference
+
+
+```python
+Fobs, p = permutation_fstat(physical_genetic_dist_archfrag.filter(["reg", "mean_genetic_dist"]).rename(columns = {"reg" : "group", "mean_genetic_dist" : "value"}, inplace = False), n_perm = 100000)
+print("Fobs    = {}".format(Fobs))
+print("P value = {}".format(p/100000))
+```
+
+    Fobs    = 22.05558926136133
+    P value = 0.0
+
+
+<a name="Sta13"></a>
+### M. Difference average archaic fragment length among homogeneous populations
+
+
+```python
+HGDParchaicfragments = %R HGDParchaicfragments %>% ungroup() %>% select(group = population, value = mean_len) %>% mutate(group = as.character(group))
+HGDParchaicfragments
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>group</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>Sardinian</td>
+      <td>71985.074627</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Sardinian</td>
+      <td>78259.701493</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Sardinian</td>
+      <td>78956.696878</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Sardinian</td>
+      <td>77378.669276</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Sardinian</td>
+      <td>74207.119741</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>111</th>
+      <td>Lahu</td>
+      <td>83404.549147</td>
+    </tr>
+    <tr>
+      <th>112</th>
+      <td>Lahu</td>
+      <td>89845.161290</td>
+    </tr>
+    <tr>
+      <th>113</th>
+      <td>Lahu</td>
+      <td>82525.368249</td>
+    </tr>
+    <tr>
+      <th>114</th>
+      <td>Lahu</td>
+      <td>82217.845659</td>
+    </tr>
+    <tr>
+      <th>115</th>
+      <td>Lahu</td>
+      <td>93013.104013</td>
+    </tr>
+  </tbody>
+</table>
+<p>115 rows × 2 columns</p>
+</div>
+
+
+
+
+```python
+for twopop in [["Sardinian", "Palestinian"], ["Lahu", "Han"], ["Sardinian", "Lahu"]]:
+    pop1, pop2 = twopop
+    HGDParchaicfragments_2pop = HGDParchaicfragments.query('group in ["{}", "{}"]'.format(pop1, pop2))
+    diffobs, p = permutation_two_group_diff(HGDParchaicfragments_2pop, n_perm = 100000)
+    print("{} vs {}".format(pop1, pop2))
+    print("diffobs = {}".format(diffobs))
+    print("P value = {}\n".format(p*2/100000))
+```
+
+    Sardinian vs Palestinian
+    diffobs = 5391.261317702578
+    P value = 0.0
+    
+    Lahu vs Han
+    diffobs = 553.4791046633618
+    P value = 0.71018
+    
+    Sardinian vs Lahu
+    diffobs = -10439.848711947096
+    P value = 2e-05
+    
 
 
 [<img src="arrow.png" width="100" style="float: left;">](#HomeHome) &nbsp;
