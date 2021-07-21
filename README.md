@@ -1,4 +1,5 @@
 # The Generation Time Project
+[![DOI](https://zenodo.org/badge/308068176.svg)](https://zenodo.org/badge/latestdoi/308068176)
 
 This repository contains the scripts to produce the data, figures, tables and perform statistical analysis included in the manuscript *Different historical generation intervals in human populations inferred from Neanderthal fragment lengths and mutation signatures* in a Jupyter Notebook document ([GenerationTimeFiguresAndTables.ipynb](GenerationTimeFiguresAndTables/GenerationTimeFiguresAndTables.md)).  
 
