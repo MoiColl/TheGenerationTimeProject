@@ -4,4 +4,4 @@ This repository contains the scripts to produce the data, figures, tables and pe
 
 To generate the [Data1_archaicfragments.txt](Data1_archaicfragments.txt) and [Data3_HGDParchaicfragments.txt](Data3_HGDParchaicfragments.txt) dataset, we followed the documentation on https://github.com/LauritsSkov/Introgression-detection, with different sets of samples detailed in the manuscript.
 
-To generate the [Data2_mutation_spectrum.txt](Data2_mutation_spectrum.txt) and other datasets, we run the scripts in [MutationAccumulation](MutationAccumulation). For a detailed description, check the [derived_alleles.ipynb](MutationAccumulation/derived_alleles.md) Jupyter Notebook.
+To generate the [Data2_mutation_spectrum.txt](Data2_mutation_spectrum.txt), we run the scripts in [MutationAccumulation](MutationAccumulation). For a detailed description, check the [derived_alleles.ipynb](MutationAccumulation/derived_alleles.md) Jupyter Notebook.
