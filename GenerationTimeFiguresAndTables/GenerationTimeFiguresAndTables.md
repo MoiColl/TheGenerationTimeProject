@@ -45,6 +45,10 @@ To be able to run all chunks below, you need to have in the same directory as th
 
     The recombination maps for each population are downloaded from https://github.com/popgenmethods/pyrho#human-recombination-maps ([Spence JP & Song YS](https://doi.org/10.1126/sciadv.aaw9206)). Once the recombination maps for the hg19 assemblies were downloaded, we renamed the populations of 1000 Genomes Project according to [ SI Table 4 ](#SupTab4).
 
+- [SimulationsArchaicFragments.txt](../SimulationsArchaicFragments.txt) and [SimulationsArchaicFragments_compare.txt](../SimulationsArchaicFragments_compare.txt)
+
+    The statistics of archaic fragments obtained from the simulated individuals as explained in the Methods section and Supplementary Information of the manuscript. 
+
 
 <a name="HomeHome"></a>
 
