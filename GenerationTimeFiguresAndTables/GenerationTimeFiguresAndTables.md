@@ -4,21 +4,25 @@ This notebook contains all the scripts coded to produce all the data, tables and
 
 To be able to run all chunks below, you need to have in the same directory as this Jupyter notebook the following files:
 
-- Data1_archaicfragments.txt
+- [ Data1_archaicfragments.txt ](../Data1_archaicfragments.txt)
 
-    This data is the collection of archaic fragments called in this manuscript for all Eurasian and American individuals in the SGDP data and 3 ancient human individuals ([Mallick S et al, 2016](https://doi.org/10.1038/nature18964)). It is provided in this GitHub page. To produce it we followed the steps described in the manuscript and detailed in https://github.com/LauritsSkov/Introgression-detection.
+    This data is the collection of archaic fragments called in this manuscript for all Eurasian and American individuals in the SGDP data and 6 ancient human individuals ([Mallick S et al.](https://doi.org/10.1038/nature18964)). It is provided in this GitHub page. To produce it we followed the steps described in the manuscript and detailed in https://github.com/LauritsSkov/Introgression-detection. Specific details for the ancient genomes are explained in the Supplementary Information of the manuscript.
 
-- Data2_mutation_spectrum.txt
+- [ Data2_mutation_spectrum.txt ](../Data2_mutation_spectrum.txt)
 
     This data is the counts of the 96-mutation types (focal mutation ancestral and derived allele with it's 5' and 3' context) for each Eurasian and American individuals in the SGDP data. The counts are further subdivided per chromosome. Particularrities for the sex chromosomes are descrived in the manuscript. This data is provided in this GitHub page. To produce it we followed the steps described in the manuscript and detailed in https://github.com/MoiColl/TheGenerationTimeProject/tree/main/MutationAccumulation.
 
-- CGenrichment.txt
+- [ Data3_HGDParchaicfragments.txt ](../Data3_HGDParchaicfragments.txt)
 
-    This data corresponds to the counts of C>G and nonC>G mutations in C>G enriched regions and nonC>G enriched regions (as described in [H Jónsson et al, 2017](https://doi.org/10.1038/nature24018) for all Eurasian and American individuals in the SGDP per chromosome. It is provided in this GitHub page. To produce it, we followed the steps described in the manuscript and detailed in https://github.com/MoiColl/TheGenerationTimeProject/tree/main/MutationAccumulation.
+    This data is the collection of archaic fragments called in this manuscript for the individuals belonging to X,Y,Z and K in the HGDP data ([Bergström A et al.](https://doi.org/10.1126/science.aay5012)). It is provided in this GitHub page. To produce it, we followed the steps described in the manuscript and detailed in https://github.com/LauritsSkov/Introgression-detection.
+
+- [ CGenrichment.txt ](../CGenrichment.txt)
+
+    This data corresponds to the counts of C>G and nonC>G mutations in C>G enriched regions and nonC>G enriched regions (as described in [Jónsson H et al.](https://doi.org/10.1038/nature24018) for all Eurasian and American individuals in the SGDP per chromosome. It is provided in this GitHub page. To produce it, we followed the steps described in the manuscript and detailed in https://github.com/MoiColl/TheGenerationTimeProject/tree/main/MutationAccumulation.
 
 - SGDP.ind
 
-    This is a modified list of the individuals used from the SGDP data ([Mallick S et al, 2016](https://doi.org/10.1038/nature18964)). Compared to the original list, we indicate the region of each individual instead of its population of origin. The original list can be downloaded as part of the SGDP dataset from https://sharehost.hms.harvard.edu/genetics/reich_lab/sgdp/cteam_lite/cteam_lite_public3.tar. We provide our modified version in https://github.com/MoiColl/TheGenerationTimeProject/blob/main/MutationAccumulation/SGDP.ind.
+    This is a modified list of the individuals used from the SGDP data ([Mallick S et al.](https://doi.org/10.1038/nature18964)). Compared to the original list, we indicate the region of each individual instead of its population of origin. The original list can be downloaded as part of the SGDP dataset from https://sharehost.hms.harvard.edu/genetics/reich_lab/sgdp/cteam_lite/cteam_lite_public3.tar. We provide our modified version in https://github.com/MoiColl/TheGenerationTimeProject/blob/main/MutationAccumulation/SGDP.ind.
 
 - Href.fa
 
@@ -28,14 +32,18 @@ To be able to run all chunks below, you need to have in the same directory as th
 
     This is a a modified file from the original SGDP metadata file (https://sharehost.hms.harvard.edu/genetics/reich_lab/sgdp/SGDP_metadata.279public.21signedLetter.44Fan.samples.txt) with the selected columns corresponding to the individual name and corresponding latitude and longitude. 
 
-- downsampled_WestEurasia.txt
+- [ downsampled_WestEurasia.txt ](../downsampled_WestEurasia.txt)
 
     This is a file produced in this Jupyter notebook with a random list of 45 WestEurasia individuals. To reproduce the results form the manuscript, we recomend to keep the original file provided in this GitHub page.
 
 
 - aau1043_DataS7.tsv and aau1043_DataS5_revision1_context.tsv
 
-    This two files correspond to the metadata and a modified version of *de novo* mutations call files provided in [BV Halldorsson et al, 2019](https://doi.org/10.1126/science.aau1043) as suppementary data. The original aau1043_DataS5_revision1.tsv was modified such that aau1043_DataS5_revision1_context.tsv incorporated the mutational context (5' and 3' contiguous base pairs) annotated. The specific method is described in https://github.com/MoiColl/TheGenerationTimeProject/tree/main/MutationAccumulation.
+    This two files correspond to the metadata and a modified version of *de novo* mutations call files provided in [Halldorsson BV et al.](https://doi.org/10.1126/science.aau1043) as suppementary data. The original aau1043_DataS5_revision1.tsv was modified such that aau1043_DataS5_revision1_context.tsv incorporated the mutational context (5' and 3' contiguous base pairs) annotated. The specific method is described in https://github.com/MoiColl/TheGenerationTimeProject/tree/main/MutationAccumulation.
+
+- hg19/\<pop\>/*_recombination_map_hapmap_format_hg19_chr_*.txt
+
+    The recombination maps for each population are downloaded from https://github.com/popgenmethods/pyrho#human-recombination-maps ([Spence JP & Song YS](https://doi.org/10.1126/sciadv.aaw9206)). Once the recombination maps for the hg19 assemblies were downloaded, we renamed the populations of 1000 Genomes Project according to [ SI Table 4 ](#SupTab4).
 
 
 <a name="HomeHome"></a>
@@ -69,11 +77,7 @@ To be able to run all chunks below, you need to have in the same directory as th
         - [ Figure 2 ](#MaiFig2)
         - [ Figure 3 ](#MaiFig3)
         - [ Figure 4 ](#MaiFig4)
-    + 2. [ Extended Figures ](#ExtFig)
-        - [ Extended Figure 1 ](#ExtFig1)
-        - [ Extended Figure 2 ](#ExtFig2)
-        - [ Extended Figure 3 ](#ExtFig3)
-    + 3. [ Supplementary Figures ](#SupFig)
+    + 2. [ Supplementary Figures ](#SupFig)
         - [ SI Figure 1 ](#SupFig1)
         - [ SI Figure 2 ](#SupFig2)
         - [ SI Figure 3 ](#SupFig3)
@@ -88,6 +92,9 @@ To be able to run all chunks below, you need to have in the same directory as th
         - [ SI Figure 12 ](#SupFig12)
         - [ SI Figure 13 ](#SupFig13)
         - [ SI Figure 14 ](#SupFig14)
+        - [ SI Figure 15 ](#SupFig15)
+        - [ SI Figure 16 ](#SupFig16)
+        - [ SI Figure 17 ](#SupFig17)
 
 4. [ Statistical test ](#Sta)
     + 1.  [ Difference average archaic fragment length among regions ](#Sta1)
@@ -5064,355 +5071,8 @@ Fig4
 
 &nbsp;
 
-<a name="ExtFig"></a>
-### B. Extended Figures
-
-<a name="ExtFig1"></a>
-#### Extended Figure 1
-
-
-```r
-%%R
-
-plot_grid(
-    plot_map_fragment_length("Data1_archaicfragments.txt",           stat = "median", post_prob = 0.50, nean = FALSE) + ggtitle("Median Archaic Fragment Length"             ),
-    plot_map_fragment_length("Data1_archaicfragments.txt",           stat = "mean",   post_prob = 0.50, nean = TRUE ) + ggtitle("Vindija-like fragments"                     ),
-    plot_map_fragment_length("Data1_archaicfragments.txt",           stat = "mean",   post_prob = 0.90, nean = FALSE) + ggtitle("High-confidence fragments"                  ), 
-    plot_map_fragment_length("archaicfragments_ind_shared_WEEA.txt", stat = "mean",   post_prob = 0.50, nean = FALSE) + ggtitle("East Asia and West Eurasia shared fragments"), 
-ncol = 1, labels = c("a", "b", "c", "d"), label_size = 8, label_fontfamily = "Helvetica") -> ExtFig1
-
-ExtFig1
-
-ggsave("ExtendedFigure1.pdf",  width = 14, height = 24, units = "cm")
-
-ExtFig1
-```
-
-
-    
-![png](output_109_0.png)
-    
-
-
-<a name="ExtFig2"></a>
-#### Extended Figure 2
-
-##### Extended Figure 2a
-
-
-```r
-%%R
-
-rbind(data.frame(y = c(4),label = c("ind01"),region = c("WestEurasia"), xmin = c(3),xmax = c(8), stringsAsFactors = F),
-                 c(4, "ind01",  "WestEurasia", 32, 36),
-                 c(4, "ind01",  "WestEurasia", 85, 95),
-      
-                 c(3, "ind02",  "WestEurasia", 78, 90),
-                 c(2, "ind45",  "WestEurasia",  5, 11),
-                 #c(2, "ind45",  "WestEurasia", 60, 65),
-                 c(1, "merged", "WestEurasia",  3, 11),
-                 c(1, "merged", "WestEurasia", 32, 36),
-                 #c(1, "merged", "WestEurasia", 60, 65),
-                 c(1, "merged", "WestEurasia", 78, 95)) %>%
-    mutate(y = as.numeric(y), xmin = as.numeric(xmin), xmax = as.numeric(xmax)) %>%
-    ggplot() +
-    geom_hline(aes(yintercept = y, color = region), show.legend = F) +
-    geom_rect(aes(xmin = xmin, xmax = xmax, ymin = y-0.15, ymax = y+0.15, color = region), fill = "white", show.legend = F) +
-    geom_rect(aes(xmin = xmin, xmax = xmax, ymin = y-0.15, ymax = y+0.15, color = region, fill = region), alpha = 0.5, show.legend = F) +
-    geom_rect(data = . %>% filter(label == "merged"), aes(xmin = xmin, xmax = xmax, ymin = y-0.15, ymax = y+0.15, color = region, fill = region), show.legend = F) +
-    geom_vline(data = . %>% filter(label == "merged"), aes(xintercept = xmax), linetype = "dotted", color = "gray50") +
-    geom_vline(data = . %>% filter(label == "merged"), aes(xintercept = xmin), linetype = "dotted", color = "gray50") +
-    geom_hline(yintercept = 1.5, color = "gray40") +
-    xlim(c(0, 100)) +
-    scale_fill_manual(values = reg_colors) +
-    scale_color_manual(values = reg_colors) +
-    scale_y_continuous(labels = c("", "joined", "ind45", "ind02", "ind01", ""), limits = c(0, 5)) +
-    theme_classic() +
-    theme(axis.line = element_blank(), axis.ticks = element_blank(), axis.text.x = element_blank()) -> ExtFig2a
-
-ExtFig2a
-```
-
-
-    
-![png](output_111_0.png)
-    
-
-
-##### Extended Figure 2b
-
-
-```r
-%%R
-
-rbind(data.frame(y = c(4),label = c("merged"),region = c("EastAsia"), xmin = c(17),xmax = c(40), stringsAsFactors = F),
-                 c(4, "merged",  "EastAsia", 50, 72),
-                 c(4, "merged",  "EastAsia", 80, 98),
-      
-                 c(3, "merged", "WestEurasia",  3, 11),
-                 c(3, "merged", "WestEurasia", 32, 36),
-                 c(3, "merged", "WestEurasia", 78, 95),
-
-                 c(2, "merged",  "both", 32, 36),
-                 c(2, "merged",  "both", 80, 95),
-                  
-                 c(1, "merged",  "WestEurasia",  3, 11),
-                 c(1, "merged",  "EastAsia",    17, 32),
-                 c(1, "merged",  "EastAsia",    36, 40),
-                 c(1, "merged",  "EastAsia",    50, 72),
-                 c(1, "merged",  "WestEurasia", 78, 80),
-                 c(1, "merged",  "EastAsia",    95, 98)) %>%
-    mutate(y = as.numeric(y), xmin = as.numeric(xmin), xmax = as.numeric(xmax)) %>%
-    ggplot() +
-    geom_hline(data = . %>% filter(y != 1), aes(yintercept = y, color = region), show.legend = F) +
-    geom_hline(data = . %>% filter(y == 1), aes(yintercept = y), color = "grey", show.legend = F) +
-    geom_rect(aes(xmin = xmin, xmax = xmax, ymin = y-0.15, ymax = y+0.15, color = region), fill = "white", show.legend = F) +
-    geom_rect(aes(xmin = xmin, xmax = xmax, ymin = y-0.15, ymax = y+0.15, color = region, fill = region), alpha = 0.5, show.legend = F) +
-    geom_rect(data = . %>% filter(label == "merged"), aes(xmin = xmin, xmax = xmax, ymin = y-0.15, ymax = y+0.15, color = region, fill = region), show.legend = F) +
-    geom_vline(data = . %>% filter(y < 3), aes(xintercept = xmax), linetype = "dotted", color = "gray50") +
-    geom_vline(data = . %>% filter(y < 3), aes(xintercept = xmin), linetype = "dotted", color = "gray50") +
-    xlim(c(0, 100)) +
-    scale_fill_manual(values = c(reg_colors, "both" = "grey")) +
-    scale_color_manual(values = c(reg_colors, "both" = "grey")) +
-    scale_y_continuous(labels = c("", "private", "shared", "joined", "joined", ""), limits = c(0, 5)) +
-    geom_hline(yintercept = 2.5, color = "gray40") +
-    theme_classic() +
-    theme(axis.line = element_blank(), axis.ticks = element_blank(), axis.text.x = element_blank()) -> ExtFig2b
-
-ExtFig2b
-```
-
-
-    
-![png](output_113_0.png)
-    
-
-
-##### Extended Figure 2c
-
-
-```r
-%%R
-
-rbind(data.frame(y = c(4),label = c("ind01"),region = c("WestEurasia"), xmin = c(3),xmax = c(8), stringsAsFactors = F),
-                 c(4, "ind01",  "WestEurasia", 32, 36),
-                 c(4, "ind01",  "WestEurasia", 85, 95),
-                 c(3, "merged", "EastAsia", 17, 40),
-                 c(3, "merged", "EastAsia", 50, 72),
-                 c(3, "merged", "EastAsia", 80, 98),
-                 c(2, "shared",  "WestEurasia", 32, 36),
-                 c(2, "shared",  "WestEurasia", 85, 95),
-                 c(1, "private", "WestEurasia",  3, 8)) %>%
-    mutate(y = as.numeric(y), xmin = as.numeric(xmin), xmax = as.numeric(xmax)) %>%
-    ggplot() +
-    geom_hline(aes(yintercept = y, color = region), show.legend = F) +
-    geom_rect(aes(xmin = xmin, xmax = xmax, ymin = y-0.15, ymax = y+0.15, color = region), fill = "white", show.legend = F) +
-    geom_rect(aes(xmin = xmin, xmax = xmax, ymin = y-0.15, ymax = y+0.15, color = region, fill = region), alpha = 0.5, show.legend = F) +
-    geom_rect(data = . %>% filter(label == "merged"), aes(xmin = xmin, xmax = xmax, ymin = y-0.15, ymax = y+0.15, color = region, fill = region), show.legend = F) +
-    geom_vline(data = . %>% filter(label == "ind01"), aes(xintercept = xmax), linetype = "dotted", color = "gray50") +
-    geom_vline(data = . %>% filter(label == "ind01"), aes(xintercept = xmin), linetype = "dotted", color = "gray50") +
-    xlim(c(0, 100)) +
-    scale_fill_manual(values = reg_colors) +
-    scale_color_manual(values = reg_colors) +
-    scale_y_continuous(labels = c(" ", "ind01\nprivate", "ind01\nshared", "joined", "ind01", " "), limits = c(0, 5)) +
-    geom_hline(yintercept = 2.5, color = "gray40") +
-    theme_classic() +
-    theme(axis.line = element_blank(), axis.ticks = element_blank(), axis.text.x = element_blank()) -> ExtFig2c
-
-ExtFig2c
-```
-
-
-    
-![png](output_115_0.png)
-    
-
-
-##### Extended Figure 2d
-
-
-```r
-%%R
-
-rbind(data.frame(y = c(4),label = c("ind01"),region = c("EastAsia"), xmin = c(20),xmax = c(40), stringsAsFactors = F),
-                 c(4, "ind01",  "EastAsia", 55, 69),
-                 c(4, "ind01",  "EastAsia", 85, 98),
-                 c(3, "ind02",  "EastAsia", 25, 35),
-                 c(3, "ind02",  "EastAsia", 80, 95),
-                 c(2, "ind45",  "EastAsia", 17, 40),
-                 c(2, "ind45",  "EastAsia", 50, 72),
-                 c(2, "ind45",  "EastAsia", 85, 90),
-                 c(1, "merged", "EastAsia", 17, 40),
-                 c(1, "merged", "EastAsia", 50, 72),
-                 c(1, "merged", "EastAsia", 80, 98)) %>%
-    mutate(y = as.numeric(y), xmin = as.numeric(xmin), xmax = as.numeric(xmax)) %>%
-    ggplot() +
-    geom_hline(aes(yintercept = y, color = region), show.legend = F) +
-    geom_rect(aes(xmin = xmin, xmax = xmax, ymin = y-0.15, ymax = y+0.15, color = region), fill = "white", show.legend = F) +
-    geom_rect(aes(xmin = xmin, xmax = xmax, ymin = y-0.15, ymax = y+0.15, color = region, fill = region), alpha = 0.5, show.legend = F) +
-    geom_rect(data = . %>% filter(label == "merged"), aes(xmin = xmin, xmax = xmax, ymin = y-0.15, ymax = y+0.15, color = region, fill = region), show.legend = F) +
-    geom_vline(aes(xintercept = seq(0, 100, 10)), linetype = "dotted", color = "gray50") +
-    xlim(c(0, 100)) +
-    scale_fill_manual(values = reg_colors) +
-    scale_color_manual(values = reg_colors) +
-    scale_y_continuous(labels = c("", "joined", "ind45", "ind02", "ind01", ""), limits = c(0, 5)) +
-    geom_hline(yintercept = 1.5, color = "gray40") +
-    geom_text(data = data.frame(lab = c(0, 1, 3, 3, 0, 2, 2, 1, 3, 2), x = seq(5, 95, 10)), aes(x = x, y = 0, label = lab)) +
-    theme_classic() +
-    theme(axis.line = element_blank(), axis.ticks = element_blank(), axis.text.x = element_blank(), axis.title = element_blank()) -> ExtFig2d
-
-ExtFig2d
-```
-
-
-    
-![png](output_117_0.png)
-    
-
-
-
-```r
-%%R
-
-plot_grid(ExtFig2a, ExtFig2b, ExtFig2c, ExtFig2d, labels = c("a", "b", "c", "d")) -> ExtFig2
-
-ggsave("ExtendedFigure2.pdf",  width = 18, height = 8, units = "cm")
-
-ExtFig2
-```
-
-
-    
-![png](output_118_0.png)
-    
-
-
-<a name="ExtFig3"></a>
-#### Extended Figure 3
-
-
-```python
-is_not_callable = False
-character_num   = 0
-start           = 0
-
-bases = ["A", "T", "C", "G"]
-
-out = open("hg19_noncall.bed", "w")
-
-with open("Href.fa", "r") as file:
-        for line in file:
-                if line.strip()[0] == ">":
-                        if is_not_callable:
-                                out.write("{}\t{}\t{}\n".format(chrom, start, character_num))
-                        chrom = line.strip().split(" ")[0][1:]
-                        is_not_callable = False
-                        character_num   = 0
-                        start           = 0
-                else:
-                        for character in line.strip():
-                                if character not in bases and not is_not_callable:
-                                        is_not_callable = True
-                                        start = character_num
-                                if character in bases and is_not_callable:
-                                        out.write("{}\t{}\t{}\n".format(chrom, start, character_num))
-                                        is_not_callable = False
-                                character_num += 1
-
-if is_not_callable:
-        out.write("{}\t{}\t{}\n".format(chrom, start, character_num))
-
-out.close()
-```
-
-
-```python
-prev_chrom = ""
-prev_end   = 0
-with open("archaicfragments_freq_WEEA_all_fragments_plot.txt", "w") as out: 
-    with open("archaicfragments_freq_WEEA_all_fragments.txt") as file:
-        for i, line in enumerate(file):
-            if not i:
-                out.write(line)
-            else:
-                chrom, start, end, freq, region = line.strip().split()
-                start = int(start)
-                if chrom != prev_chrom:
-                    prev_chrom = chrom
-                    prev_end   = 0
-                if prev_end != start:
-                    if prev_end:
-                        out.write("\t".join([chrom, str(prev_end), str(prev_end+1000), "0", region])+"\n")
-                    out.write("\t".join([chrom, str(start-1000), str(start), "0", region])+"\n")
-                prev_end = int(end)
-                out.write(line)
-        out.write("\t".join([chrom, str(prev_end), str(prev_end-1000), "0", region])+"\n")
-```
-
-
-```r
-%%R
-
-data.frame(chrom = -1:-23, 
-           chrom_len = c(249250621, 243199373, 198022430, 191154276, 180915260, 171115067, 159138663, 146364022, 141213431, 135534747, 135006516, 
-                         133851895, 115169878, 107349540, 102531392, 90354753,   81195210,  78077248,  59128983,  63025520,  48129895,  51304566, 
-                         155270560)) -> chrom_len
-
-read.table("hg19_noncall.bed", col.names = c("chrom", "start", "end")) %>% 
-    filter(chrom %in% c(as.character(1:22), "X"), end-start > 25000) %>%
-    mutate(chrom = -1*as.numeric(factor(chrom, c(as.character(1:22), "X")))) -> non_callable
-```
-
-
-```r
-%%R -h 1000 -w 1000
-
-middle = 4
-joined = 7
-total  = 60
-
-read.table("archaicfragments_joined_WE.bed",   col.names = c("chrom", "start", "end")) %>% mutate(chrom = -100*as.numeric(factor(chrom, c(as.character(1:22), "X")))) %>% mutate(chrom = chrom+(middle+joined), region = "WestEurasia") -> joinedWE
-read.table("archaicfragments_joined_EA.bed",   col.names = c("chrom", "start", "end")) %>% mutate(chrom = -100*as.numeric(factor(chrom, c(as.character(1:22), "X")))) %>% mutate(chrom = chrom-(middle+joined), region = "EastAsia")    -> joinedEA
-read.table("archaicfragments_shared_WEEA.bed", col.names = c("chrom", "start", "end")) %>% mutate(chrom = -100*as.numeric(factor(chrom, c(as.character(1:22), "X")))) -> sharedWEEA
-
-read.table("archaicfragments_freq_WEEA_all_fragments_plot.txt", header = T) %>% 
-    mutate(chrom = -100*as.numeric(factor(chrom, c(as.character(1:22), "X")))) %>%
-    mutate(freq = ifelse(region == "WestEurasia", ((freq*(total-(middle+joined))/45)+(middle+joined))+chrom,   (-1*(freq*(total-(middle+joined))/45)-(middle+joined))+chrom)) %>%
-    ggplot() +
-    geom_line(data = . %>% filter(region == "WestEurasia"), aes(x = start+500, y = freq, color = region, group = chrom)) +
-    geom_line(data = . %>% filter(region == "EastAsia"),    aes(x = start+500, y = freq, color = region, group = chrom)) +
-    geom_rect(data = joinedWE,     aes(xmin = start, xmax = end,       ymin = chrom-joined,                ymax = chrom,                        fill = region)) +
-    geom_rect(data = joinedEA,     aes(xmin = start, xmax = end,       ymin = chrom+joined,                ymax = chrom,                        fill = region)) +
-    geom_rect(data = sharedWEEA,   aes(xmin = start, xmax = end,       ymin = chrom+middle,                ymax = chrom-middle),                fill = "black") +
-    geom_rect(data = non_callable, aes(xmin = start, xmax = end,       ymin = 100*chrom-(middle+joined),   ymax = 100*chrom+(middle+joined)),   fill = "gray") +
-    geom_rect(data = chrom_len,    aes(xmin = 0,     xmax = chrom_len, ymin = (100*chrom)+(middle+joined), ymax = (100*chrom)-(middle+joined)), color = "black", alpha = 0, size = 0.5) +
-    theme(panel.grid = element_blank(), axis.ticks.y= element_blank(),  axis.line.x= element_line(colour = "black"), 
-          panel.border = element_blank(), legend.position = c(0.75, 0.5), legend.title=element_blank()) +
-    scale_y_continuous(breaks = (c(1:23)*-100), labels = c(1:22, "X")) +
-    scale_fill_manual(values = reg_colors) +
-    scale_color_manual(values = reg_colors) +
-    xlab("Position (bp)") +
-    ylab("Chromosome") -> ExtFig3
-
-ExtFig3
-    
-ggsave("ExtendedFigure3.pdf",  width = 19, height = 19, units = "cm") 
-
-ExtFig3
-```
-
-
-    
-![png](output_123_0.png)
-    
-
-
-[<img src="arrow.png" width="100" style="float: left;">](#HomeHome) &nbsp;
-
-&nbsp;
-
 <a name="SupFig"></a>
-### C. Supplementary Figures
+### B. Supplementary Figures
 
 <a name="SupFig1"></a>
 #### SI Figure 1
@@ -5452,12 +5112,39 @@ SIFig1
 
 
     
-![png](output_125_0.png)
+![png](output_109_0.png)
     
 
 
 <a name="SupFig2"></a>
 #### SI Figure 2
+
+
+```r
+%%R
+
+plot_grid(
+    plot_map_fragment_length("Data1_archaicfragments.txt",           stat = "median", post_prob = 0.50, nean = FALSE) + ggtitle("Median Archaic Fragment Length"             ),
+    plot_map_fragment_length("Data1_archaicfragments.txt",           stat = "mean",   post_prob = 0.50, nean = TRUE ) + ggtitle("Vindija-like fragments"                     ),
+    plot_map_fragment_length("Data1_archaicfragments.txt",           stat = "mean",   post_prob = 0.90, nean = FALSE) + ggtitle("High-confidence fragments"                  ), 
+    plot_map_fragment_length("archaicfragments_ind_shared_WEEA.txt", stat = "mean",   post_prob = 0.50, nean = FALSE) + ggtitle("East Asia and West Eurasia shared fragments"), 
+ncol = 1, labels = c("a", "b", "c", "d"), label_size = 8, label_fontfamily = "Helvetica") -> ExtFig1
+
+ExtFig1
+
+ggsave("SIFig2.pdf",  width = 14, height = 24, units = "cm")
+
+SIFig2
+```
+
+
+    
+![png](output_111_0.png)
+    
+
+
+<a name="SupFig3"></a>
+#### SI Figure 3
 
 Intersect recombination blocks with archaic fragments for every individual in each population
 
@@ -5900,13 +5587,13 @@ plot_grid(
         theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(), legend.position = c(0.85, 0.15),
               axis.ticks.x = element_blank(), axis.title.x = element_blank(), axis.text.x = element_blank()) +
         ylab("Mean archaic\nfragment length (cM)") +
-        ggtitle("Genetic distance, scaled genetic map"), nrow = 1, labels = "auto", label_size = 8, label_fontfamily = "Helvetica") -> SIFig2
+        ggtitle("Genetic distance, scaled genetic map"), nrow = 1, labels = "auto", label_size = 8, label_fontfamily = "Helvetica") -> SIFig3
 
-SIFig2
+SIFig3
     
-ggsave("SIFig2.pdf",  width = 19, height = 10, units = "cm") 
+ggsave("SIFig3.pdf",  width = 19, height = 10, units = "cm") 
 
-SIFig2
+SIFig3
 ```
 
     R[write to console]: `stat_bindot()` using `bins = 30`. Pick better value with `binwidth`.
@@ -5917,12 +5604,12 @@ SIFig2
 
 
     
-![png](output_137_1.png)
+![png](output_123_1.png)
     
 
 
-<a name="SupFig3"></a>
-#### SI Figure 3
+<a name="SupFig4"></a>
+#### SI Figure 4
 
 
 ```r
@@ -5933,23 +5620,23 @@ physical_genetic_dist_archfrag %>%
     geom_point(aes(x = mean_physical_dist,  y = mean_genetic_dist, fill = region, color = region), size = 2) +
     scale_color_manual(values = reg_colors) +
     ylab("Mean Genetic\nArchaic Fragment Length (cM)") +
-    xlab("Mean Physical\nArchaic Fragment Length (bp)") -> SIFig3
+    xlab("Mean Physical\nArchaic Fragment Length (bp)") -> SIFig4
 
-SIFig3
+SIFig4
     
-ggsave("SIFig3.pdf",  width = 9, height = 7, units = "cm") 
+ggsave("SIFig4.pdf",  width = 9, height = 7, units = "cm") 
 
-SIFig3
+SIFig4
 ```
 
 
     
-![png](output_139_0.png)
+![png](output_125_0.png)
     
 
 
-<a name="SupFig4"></a>
-#### SI Figure 4
+<a name="SupFig5"></a>
+#### SI Figure 5
 
 
 ```r
@@ -5983,23 +5670,23 @@ read.table("Data1_archaicfragments.txt", header = T) %>%
     ylab("Mean Archaic\nFragment Length (bp)") +
     xlab("Population") +
     scale_fill_manual(values = reg_colors) +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 4), legend.position = c(0.08, 0.8), legend.background = element_blank(), legend.title = element_blank()) -> SIFig4
+    theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 4), legend.position = c(0.08, 0.8), legend.background = element_blank(), legend.title = element_blank()) -> SIFig5
 
-SIFig4
+SIFig5
     
-ggsave("SIFig4.pdf",  width = 19, height = 10, units = "cm") 
+ggsave("SIFig5.pdf",  width = 19, height = 10, units = "cm") 
 
-SIFig4
+SIFig5
 ```
 
 
     
-![png](output_141_0.png)
+![png](output_127_0.png)
     
 
 
-<a name="SupFig5"></a>
-#### SI Figure 5
+<a name="SupFig6"></a>
+#### SI Figure 6
 
 
 ```r
@@ -6022,13 +5709,13 @@ read.table("Data3_HGDParchaicfragments.txt", header = T) %>%
 
 plot_grid(plot_dist_HGDP(HGDParchaicfragments %>% select(name, population, region, value = mean_len), "Mean Archaic\nFragment Length (bp)"),
           plot_dist_HGDP(HGDParchaicfragments %>% select(name, population, region, value = n_frag), "Number Archaic\nFragments"),
-          plot_dist_HGDP(HGDParchaicfragments %>% select(name, population, region, value = total_seq), "Archaic\nSequence (bp)"), ncol = 1, labels = c("a", "b", "c"), label_size = 8, label_fontfamily = "Helvetica")  -> SIFig5
+          plot_dist_HGDP(HGDParchaicfragments %>% select(name, population, region, value = total_seq), "Archaic\nSequence (bp)"), ncol = 1, labels = c("a", "b", "c"), label_size = 8, label_fontfamily = "Helvetica")  -> SIFig6
 
-SIFig5
+SIFig6
     
-ggsave("SIFig5.pdf",  width = 12, height = 15, units = "cm") 
+ggsave("SIFig6.pdf",  width = 12, height = 15, units = "cm") 
 
-SIFig5
+SIFig6
 ```
 
     R[write to console]: `stat_bindot()` using `bins = 30`. Pick better value with `binwidth`.
@@ -6041,15 +5728,328 @@ SIFig5
 
 
     
-![png](output_143_1.png)
+![png](output_129_1.png)
     
 
 
-<a name="SupFig6"></a>
-#### SI Figure 6
-
 <a name="SupFig7"></a>
 #### SI Figure 7
+
+##### SI Figure 7a
+
+
+```r
+%%R
+
+rbind(data.frame(y = c(4),label = c("ind01"),region = c("WestEurasia"), xmin = c(3),xmax = c(8), stringsAsFactors = F),
+                 c(4, "ind01",  "WestEurasia", 32, 36),
+                 c(4, "ind01",  "WestEurasia", 85, 95),
+      
+                 c(3, "ind02",  "WestEurasia", 78, 90),
+                 c(2, "ind45",  "WestEurasia",  5, 11),
+                 #c(2, "ind45",  "WestEurasia", 60, 65),
+                 c(1, "merged", "WestEurasia",  3, 11),
+                 c(1, "merged", "WestEurasia", 32, 36),
+                 #c(1, "merged", "WestEurasia", 60, 65),
+                 c(1, "merged", "WestEurasia", 78, 95)) %>%
+    mutate(y = as.numeric(y), xmin = as.numeric(xmin), xmax = as.numeric(xmax)) %>%
+    ggplot() +
+    geom_hline(aes(yintercept = y, color = region), show.legend = F) +
+    geom_rect(aes(xmin = xmin, xmax = xmax, ymin = y-0.15, ymax = y+0.15, color = region), fill = "white", show.legend = F) +
+    geom_rect(aes(xmin = xmin, xmax = xmax, ymin = y-0.15, ymax = y+0.15, color = region, fill = region), alpha = 0.5, show.legend = F) +
+    geom_rect(data = . %>% filter(label == "merged"), aes(xmin = xmin, xmax = xmax, ymin = y-0.15, ymax = y+0.15, color = region, fill = region), show.legend = F) +
+    geom_vline(data = . %>% filter(label == "merged"), aes(xintercept = xmax), linetype = "dotted", color = "gray50") +
+    geom_vline(data = . %>% filter(label == "merged"), aes(xintercept = xmin), linetype = "dotted", color = "gray50") +
+    geom_hline(yintercept = 1.5, color = "gray40") +
+    xlim(c(0, 100)) +
+    scale_fill_manual(values = reg_colors) +
+    scale_color_manual(values = reg_colors) +
+    scale_y_continuous(labels = c("", "joined", "ind45", "ind02", "ind01", ""), limits = c(0, 5)) +
+    theme_classic() +
+    theme(axis.line = element_blank(), axis.ticks = element_blank(), axis.text.x = element_blank()) -> SIFig7a
+
+SIFig7a
+```
+
+
+    
+![png](output_131_0.png)
+    
+
+
+##### SI Figure 7b
+
+
+```r
+%%R
+
+rbind(data.frame(y = c(4),label = c("merged"),region = c("EastAsia"), xmin = c(17),xmax = c(40), stringsAsFactors = F),
+                 c(4, "merged",  "EastAsia", 50, 72),
+                 c(4, "merged",  "EastAsia", 80, 98),
+      
+                 c(3, "merged", "WestEurasia",  3, 11),
+                 c(3, "merged", "WestEurasia", 32, 36),
+                 c(3, "merged", "WestEurasia", 78, 95),
+
+                 c(2, "merged",  "both", 32, 36),
+                 c(2, "merged",  "both", 80, 95),
+                  
+                 c(1, "merged",  "WestEurasia",  3, 11),
+                 c(1, "merged",  "EastAsia",    17, 32),
+                 c(1, "merged",  "EastAsia",    36, 40),
+                 c(1, "merged",  "EastAsia",    50, 72),
+                 c(1, "merged",  "WestEurasia", 78, 80),
+                 c(1, "merged",  "EastAsia",    95, 98)) %>%
+    mutate(y = as.numeric(y), xmin = as.numeric(xmin), xmax = as.numeric(xmax)) %>%
+    ggplot() +
+    geom_hline(data = . %>% filter(y != 1), aes(yintercept = y, color = region), show.legend = F) +
+    geom_hline(data = . %>% filter(y == 1), aes(yintercept = y), color = "grey", show.legend = F) +
+    geom_rect(aes(xmin = xmin, xmax = xmax, ymin = y-0.15, ymax = y+0.15, color = region), fill = "white", show.legend = F) +
+    geom_rect(aes(xmin = xmin, xmax = xmax, ymin = y-0.15, ymax = y+0.15, color = region, fill = region), alpha = 0.5, show.legend = F) +
+    geom_rect(data = . %>% filter(label == "merged"), aes(xmin = xmin, xmax = xmax, ymin = y-0.15, ymax = y+0.15, color = region, fill = region), show.legend = F) +
+    geom_vline(data = . %>% filter(y < 3), aes(xintercept = xmax), linetype = "dotted", color = "gray50") +
+    geom_vline(data = . %>% filter(y < 3), aes(xintercept = xmin), linetype = "dotted", color = "gray50") +
+    xlim(c(0, 100)) +
+    scale_fill_manual(values = c(reg_colors, "both" = "grey")) +
+    scale_color_manual(values = c(reg_colors, "both" = "grey")) +
+    scale_y_continuous(labels = c("", "private", "shared", "joined", "joined", ""), limits = c(0, 5)) +
+    geom_hline(yintercept = 2.5, color = "gray40") +
+    theme_classic() +
+    theme(axis.line = element_blank(), axis.ticks = element_blank(), axis.text.x = element_blank()) -> SIFig7b
+
+SIFig7b
+```
+
+
+    
+![png](output_133_0.png)
+    
+
+
+##### SI Figure 7c
+
+
+```r
+%%R
+
+rbind(data.frame(y = c(4),label = c("ind01"),region = c("WestEurasia"), xmin = c(3),xmax = c(8), stringsAsFactors = F),
+                 c(4, "ind01",  "WestEurasia", 32, 36),
+                 c(4, "ind01",  "WestEurasia", 85, 95),
+                 c(3, "merged", "EastAsia", 17, 40),
+                 c(3, "merged", "EastAsia", 50, 72),
+                 c(3, "merged", "EastAsia", 80, 98),
+                 c(2, "shared",  "WestEurasia", 32, 36),
+                 c(2, "shared",  "WestEurasia", 85, 95),
+                 c(1, "private", "WestEurasia",  3, 8)) %>%
+    mutate(y = as.numeric(y), xmin = as.numeric(xmin), xmax = as.numeric(xmax)) %>%
+    ggplot() +
+    geom_hline(aes(yintercept = y, color = region), show.legend = F) +
+    geom_rect(aes(xmin = xmin, xmax = xmax, ymin = y-0.15, ymax = y+0.15, color = region), fill = "white", show.legend = F) +
+    geom_rect(aes(xmin = xmin, xmax = xmax, ymin = y-0.15, ymax = y+0.15, color = region, fill = region), alpha = 0.5, show.legend = F) +
+    geom_rect(data = . %>% filter(label == "merged"), aes(xmin = xmin, xmax = xmax, ymin = y-0.15, ymax = y+0.15, color = region, fill = region), show.legend = F) +
+    geom_vline(data = . %>% filter(label == "ind01"), aes(xintercept = xmax), linetype = "dotted", color = "gray50") +
+    geom_vline(data = . %>% filter(label == "ind01"), aes(xintercept = xmin), linetype = "dotted", color = "gray50") +
+    xlim(c(0, 100)) +
+    scale_fill_manual(values = reg_colors) +
+    scale_color_manual(values = reg_colors) +
+    scale_y_continuous(labels = c(" ", "ind01\nprivate", "ind01\nshared", "joined", "ind01", " "), limits = c(0, 5)) +
+    geom_hline(yintercept = 2.5, color = "gray40") +
+    theme_classic() +
+    theme(axis.line = element_blank(), axis.ticks = element_blank(), axis.text.x = element_blank()) -> SIFig7c
+
+SIFig7c
+```
+
+
+    
+![png](output_135_0.png)
+    
+
+
+##### SI Figure 7d
+
+
+```r
+%%R
+
+rbind(data.frame(y = c(4),label = c("ind01"),region = c("EastAsia"), xmin = c(20),xmax = c(40), stringsAsFactors = F),
+                 c(4, "ind01",  "EastAsia", 55, 69),
+                 c(4, "ind01",  "EastAsia", 85, 98),
+                 c(3, "ind02",  "EastAsia", 25, 35),
+                 c(3, "ind02",  "EastAsia", 80, 95),
+                 c(2, "ind45",  "EastAsia", 17, 40),
+                 c(2, "ind45",  "EastAsia", 50, 72),
+                 c(2, "ind45",  "EastAsia", 85, 90),
+                 c(1, "merged", "EastAsia", 17, 40),
+                 c(1, "merged", "EastAsia", 50, 72),
+                 c(1, "merged", "EastAsia", 80, 98)) %>%
+    mutate(y = as.numeric(y), xmin = as.numeric(xmin), xmax = as.numeric(xmax)) %>%
+    ggplot() +
+    geom_hline(aes(yintercept = y, color = region), show.legend = F) +
+    geom_rect(aes(xmin = xmin, xmax = xmax, ymin = y-0.15, ymax = y+0.15, color = region), fill = "white", show.legend = F) +
+    geom_rect(aes(xmin = xmin, xmax = xmax, ymin = y-0.15, ymax = y+0.15, color = region, fill = region), alpha = 0.5, show.legend = F) +
+    geom_rect(data = . %>% filter(label == "merged"), aes(xmin = xmin, xmax = xmax, ymin = y-0.15, ymax = y+0.15, color = region, fill = region), show.legend = F) +
+    geom_vline(aes(xintercept = seq(0, 100, 10)), linetype = "dotted", color = "gray50") +
+    xlim(c(0, 100)) +
+    scale_fill_manual(values = reg_colors) +
+    scale_color_manual(values = reg_colors) +
+    scale_y_continuous(labels = c("", "joined", "ind45", "ind02", "ind01", ""), limits = c(0, 5)) +
+    geom_hline(yintercept = 1.5, color = "gray40") +
+    geom_text(data = data.frame(lab = c(0, 1, 3, 3, 0, 2, 2, 1, 3, 2), x = seq(5, 95, 10)), aes(x = x, y = 0, label = lab)) +
+    theme_classic() +
+    theme(axis.line = element_blank(), axis.ticks = element_blank(), axis.text.x = element_blank(), axis.title = element_blank()) -> SIFig7d
+
+SIFig7d
+```
+
+
+    
+![png](output_137_0.png)
+    
+
+
+
+```r
+%%R
+
+plot_grid(SIFig7a, SIFig7b, SIFig7c, SIFig7d, labels = c("a", "b", "c", "d")) -> SIFig7
+
+ggsave("SIFig7.pdf",  width = 18, height = 8, units = "cm")
+
+SIFig7
+```
+
+
+    
+![png](output_138_0.png)
+    
+
+
+<a name="SupFig8"></a>
+#### SI Figure 8
+
+
+```python
+is_not_callable = False
+character_num   = 0
+start           = 0
+
+bases = ["A", "T", "C", "G"]
+
+out = open("hg19_noncall.bed", "w")
+
+with open("Href.fa", "r") as file:
+        for line in file:
+                if line.strip()[0] == ">":
+                        if is_not_callable:
+                                out.write("{}\t{}\t{}\n".format(chrom, start, character_num))
+                        chrom = line.strip().split(" ")[0][1:]
+                        is_not_callable = False
+                        character_num   = 0
+                        start           = 0
+                else:
+                        for character in line.strip():
+                                if character not in bases and not is_not_callable:
+                                        is_not_callable = True
+                                        start = character_num
+                                if character in bases and is_not_callable:
+                                        out.write("{}\t{}\t{}\n".format(chrom, start, character_num))
+                                        is_not_callable = False
+                                character_num += 1
+
+if is_not_callable:
+        out.write("{}\t{}\t{}\n".format(chrom, start, character_num))
+
+out.close()
+```
+
+
+```python
+prev_chrom = ""
+prev_end   = 0
+with open("archaicfragments_freq_WEEA_all_fragments_plot.txt", "w") as out: 
+    with open("archaicfragments_freq_WEEA_all_fragments.txt") as file:
+        for i, line in enumerate(file):
+            if not i:
+                out.write(line)
+            else:
+                chrom, start, end, freq, region = line.strip().split()
+                start = int(start)
+                if chrom != prev_chrom:
+                    prev_chrom = chrom
+                    prev_end   = 0
+                if prev_end != start:
+                    if prev_end:
+                        out.write("\t".join([chrom, str(prev_end), str(prev_end+1000), "0", region])+"\n")
+                    out.write("\t".join([chrom, str(start-1000), str(start), "0", region])+"\n")
+                prev_end = int(end)
+                out.write(line)
+        out.write("\t".join([chrom, str(prev_end), str(prev_end-1000), "0", region])+"\n")
+```
+
+
+```r
+%%R
+
+data.frame(chrom = -1:-23, 
+           chrom_len = c(249250621, 243199373, 198022430, 191154276, 180915260, 171115067, 159138663, 146364022, 141213431, 135534747, 135006516, 
+                         133851895, 115169878, 107349540, 102531392, 90354753,   81195210,  78077248,  59128983,  63025520,  48129895,  51304566, 
+                         155270560)) -> chrom_len
+
+read.table("hg19_noncall.bed", col.names = c("chrom", "start", "end")) %>% 
+    filter(chrom %in% c(as.character(1:22), "X"), end-start > 25000) %>%
+    mutate(chrom = -1*as.numeric(factor(chrom, c(as.character(1:22), "X")))) -> non_callable
+```
+
+
+```r
+%%R -h 1000 -w 1000
+
+middle = 4
+joined = 7
+total  = 60
+
+read.table("archaicfragments_joined_WE.bed",   col.names = c("chrom", "start", "end")) %>% mutate(chrom = -100*as.numeric(factor(chrom, c(as.character(1:22), "X")))) %>% mutate(chrom = chrom+(middle+joined), region = "WestEurasia") -> joinedWE
+read.table("archaicfragments_joined_EA.bed",   col.names = c("chrom", "start", "end")) %>% mutate(chrom = -100*as.numeric(factor(chrom, c(as.character(1:22), "X")))) %>% mutate(chrom = chrom-(middle+joined), region = "EastAsia")    -> joinedEA
+read.table("archaicfragments_shared_WEEA.bed", col.names = c("chrom", "start", "end")) %>% mutate(chrom = -100*as.numeric(factor(chrom, c(as.character(1:22), "X")))) -> sharedWEEA
+
+read.table("archaicfragments_freq_WEEA_all_fragments_plot.txt", header = T) %>% 
+    mutate(chrom = -100*as.numeric(factor(chrom, c(as.character(1:22), "X")))) %>%
+    mutate(freq = ifelse(region == "WestEurasia", ((freq*(total-(middle+joined))/45)+(middle+joined))+chrom,   (-1*(freq*(total-(middle+joined))/45)-(middle+joined))+chrom)) %>%
+    ggplot() +
+    geom_line(data = . %>% filter(region == "WestEurasia"), aes(x = start+500, y = freq, color = region, group = chrom)) +
+    geom_line(data = . %>% filter(region == "EastAsia"),    aes(x = start+500, y = freq, color = region, group = chrom)) +
+    geom_rect(data = joinedWE,     aes(xmin = start, xmax = end,       ymin = chrom-joined,                ymax = chrom,                        fill = region)) +
+    geom_rect(data = joinedEA,     aes(xmin = start, xmax = end,       ymin = chrom+joined,                ymax = chrom,                        fill = region)) +
+    geom_rect(data = sharedWEEA,   aes(xmin = start, xmax = end,       ymin = chrom+middle,                ymax = chrom-middle),                fill = "black") +
+    geom_rect(data = non_callable, aes(xmin = start, xmax = end,       ymin = 100*chrom-(middle+joined),   ymax = 100*chrom+(middle+joined)),   fill = "gray") +
+    geom_rect(data = chrom_len,    aes(xmin = 0,     xmax = chrom_len, ymin = (100*chrom)+(middle+joined), ymax = (100*chrom)-(middle+joined)), color = "black", alpha = 0, size = 0.5) +
+    theme(panel.grid = element_blank(), axis.ticks.y= element_blank(),  axis.line.x= element_line(colour = "black"), 
+          panel.border = element_blank(), legend.position = c(0.75, 0.5), legend.title=element_blank()) +
+    scale_y_continuous(breaks = (c(1:23)*-100), labels = c(1:22, "X")) +
+    scale_fill_manual(values = reg_colors) +
+    scale_color_manual(values = reg_colors) +
+    xlab("Position (bp)") +
+    ylab("Chromosome") -> SIFig8
+
+SIFig8
+    
+ggsave("SIFig8.pdf",  width = 19, height = 19, units = "cm") 
+
+SIFig8
+```
+
+
+    
+![png](output_143_0.png)
+    
+
+
+<a name="SupFig9"></a>
+#### SI Figure 9
+
+<a name="SupFig10"></a>
+#### SI Figure 10
 
 
 ```r
@@ -6099,13 +6099,13 @@ plot_grid(
     simulation_fragstats_ratio("n_frag", "\nRatio"),
     simulation_fragstats_twopops("total_seq", "Archaic\nSequence (bp)"),
     simulation_fragstats_ratio("total_seq", "\nRatio"), 
-    ncol = 1, align = c("v"), rel_heights = c(1, 0.5, 1, 0.5, 1, 0.5), labels = c("a", "", "b", "", "c"), label_size = 8, label_fontfamily = "Helvetica") -> SIFig7
+    ncol = 1, align = c("v"), rel_heights = c(1, 0.5, 1, 0.5, 1, 0.5), labels = c("a", "", "b", "", "c"), label_size = 8, label_fontfamily = "Helvetica") -> SIFig10
 
-SIFig7
+SIFig10
     
-ggsave("SIFig7.pdf",  width = 18, height = 21, units = "cm") 
+ggsave("SIFig10.pdf",  width = 18, height = 21, units = "cm") 
 
-SIFig7
+SIFig10
 ```
 
 
@@ -6114,8 +6114,8 @@ SIFig7
     
 
 
-<a name="SupFig8"></a>
-#### SI Figure 8
+<a name="SupFig11"></a>
+#### SI Figure 11
 
 
 ```r
@@ -6145,13 +6145,13 @@ plot_grid(
         ylab("Shared Joined\nArchaic Sequence (%)") +
         theme(strip.text = element_text(size = 5,  family = "Helvetica"), axis.title.x = element_blank(), legend.title = element_blank()), 
     
-    ncol = 1, labels = c("a", "b"), align = c("v"), rel_heights = c(1, 0.5), label_size = 8, label_fontfamily = "Helvetica") -> SIFig8
+    ncol = 1, labels = c("a", "b"), align = c("v"), rel_heights = c(1, 0.5), label_size = 8, label_fontfamily = "Helvetica") -> SIFig11
 
-SIFig8
+SIFig11
     
-ggsave("SIFig8.pdf",  width = 18, height = 15, units = "cm") 
+ggsave("SIFig11.pdf",  width = 18, height = 15, units = "cm") 
 
-SIFig8
+SIFig11
 ```
 
 
@@ -6160,10 +6160,10 @@ SIFig8
     
 
 
-<a name="SupFig9"></a>
-#### SI Figure 9
+<a name="SupFig12"></a>
+#### SI Figure 12
 
-##### SI Figure 9a
+##### SI Figure 12a
 
 
 ```r
@@ -6189,9 +6189,9 @@ mutation_spectrum_pereg() %>%
     geom_errorbar(              aes(x = mutation, ymin = mean-(1.96*se), ymax = mean+(1.96*se), group = reg), position = position_dodge()) +
     ylab("Mean number of derived alleles") +
     theme(axis.title.x = element_blank(),panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(), legend.position = "none") +
-    scale_fill_manual(values = reg_colors) -> SIFig9a
+    scale_fill_manual(values = reg_colors) -> SIFig12a
     
-SIFig9a
+SIFig12a
 ```
 
 
@@ -6200,7 +6200,7 @@ SIFig9a
     
 
 
-##### SI Figure 9b
+##### SI Figure 12b
 
 
 ```r
@@ -6233,9 +6233,9 @@ plot_grid(plot_mutation_spectrum_dist("T>A"),
           plot_mutation_spectrum_dist("C>G"),
           plot_mutation_spectrum_dist("CpG>TpG"),
           plot_mutation_spectrum_dist("C>T'"),
-          plot_mutation_spectrum_dist("TCC>TTC"), nrow = 3) -> SIFig9b
+          plot_mutation_spectrum_dist("TCC>TTC"), nrow = 3) -> SIFig12b
     
-SIFig9b
+SIFig12b
 ```
 
 
@@ -6248,13 +6248,13 @@ SIFig9b
 ```r
 %%R
 
-plot_grid(SIFig9a , SIFig9b, labels = c("a", "b"), rel_heights = c(1.5, 3), ncol = 1) -> SIFig9
+plot_grid(SIFig9a , SIFig9b, labels = c("a", "b"), rel_heights = c(1.5, 3), ncol = 1) -> SIFig12
 
-SIFig9
+SIFig12
 
-ggsave("SIFig9.pdf",  width = 18, height = 20, units = "cm")
+ggsave("SIFig12.pdf",  width = 18, height = 20, units = "cm")
 
-SIFig9
+SIFig12
 ```
 
 
@@ -6263,11 +6263,11 @@ SIFig9
     
 
 
-<a name="SupFig10"></a>
-#### SI Figure 10
+<a name="SupFig13"></a>
+#### SI Figure 13
 
-<a name="SupFig11"></a>
-#### SI Figure 11
+<a name="SupFig14"></a>
+#### SI Figure 14
 
 
 ```r
@@ -6289,13 +6289,13 @@ read.table("SITab11.txt", header = T) %>%
     geom_point(aes(x = SGDP_estimate, y = deCODE_estimate, color = mutation), size = 2) +
     theme(aspect.ratio =  1) +
     xlab("SGDP") +
-    ylab("deCODE") -> SIFig11
+    ylab("deCODE") -> SIFig14
     
-SIFig11
+SIFig14
 
-ggsave("SIFig11.pdf",  width = 8, height = 8, units = "cm")
+ggsave("SIFig14.pdf",  width = 8, height = 8, units = "cm")
 
-SIFig11
+SIFig14
 ```
 
 
@@ -6304,8 +6304,8 @@ SIFig11
     
 
 
-<a name="SupFig12"></a>
-#### SI Figure 12
+<a name="SupFig15"></a>
+#### SI Figure 15
 
 
 ```r
@@ -6343,13 +6343,13 @@ read.table("aau1043_DataS7.tsv", header = T, sep = "\t") %>%
   geom_text(data = . %>% summarise(mean = mean(Father_age-Mother_age)), aes(x = mean-2.5, y = 11500, label = paste("Mean = ", round(mean, digits = 2), sep = ""))) +
   geom_text(data = . %>% summarise(mean = mean(Father_age-Mother_age), sd = sd(Father_age-Mother_age)), aes(x = mean-2.5, y = 10500, label = paste("sd = ", round(sd, digits = 2), sep = ""))) +
   ylab("Counts") +
-  xlab("Father age - Mother age"), labels = "auto", nrow = 1, label_size = 8, label_fontfamily = "Helvetica") -> SIFig12
+  xlab("Father age - Mother age"), labels = "auto", nrow = 1, label_size = 8, label_fontfamily = "Helvetica") -> SIFig15
 
-SIFig12
+SIFig15
 
-ggsave("SIFig12.pdf",  width = 17, height = 7, units = "cm")
+ggsave("SIFig15.pdf",  width = 17, height = 7, units = "cm")
 
-SIFig12
+SIFig15
 ```
 
 
@@ -6358,8 +6358,8 @@ SIFig12
     
 
 
-<a name="SupFig13"></a>
-#### SI Figure 13
+<a name="SupFig16"></a>
+#### SI Figure 16
 
 
 ```r
@@ -6386,13 +6386,13 @@ linear_model_table(list(deCODE_mutation_spectrum_mean_age(), deCODE_mutation_spe
     geom_point(aes(x = deCODE_4_estimate, y = deCODE_0_estimate, color = mutation), size = 2) +
     theme(aspect.ratio =  1) +
     xlab("deCODE, parental age difference < 4 years") +
-    ylab("deCODE") -> SIFig13
+    ylab("deCODE") -> SIFig16
     
-SIFig13
+SIFig16
 
-ggsave("SIFig13.pdf",  width = 8, height = 8, units = "cm")
+ggsave("SIFig16.pdf",  width = 8, height = 8, units = "cm")
 
-SIFig13
+SIFig16
 ```
 
 
@@ -6401,8 +6401,8 @@ SIFig13
     
 
 
-<a name="SupFig14"></a>
-#### SI Figure 14
+<a name="SupFig17"></a>
+#### SI Figure 17
 
 
 ```r
@@ -6443,13 +6443,13 @@ read.table("Data2_mutation_spectrum.txt", header = T) %>%
     scale_color_manual(values = reg_colors)+
     scale_fill_manual(values = reg_colors) +
     geom_errorbar(data = read.table("SITab13.txt", header =  T), aes(x = reg, ymin = derallele_mean-(1.96*derallele_se), ymax = derallele_mean+(1.96*derallele_se)), width = 0.25, size = 0.5) +
-    geom_point(data = read.table("SITab13.txt", header =  T), aes(x = reg, y = derallele_mean, fill = reg), color = "black", size = 2, shape = 22)  -> SIFig14
+    geom_point(data = read.table("SITab13.txt", header =  T), aes(x = reg, y = derallele_mean, fill = reg), color = "black", size = 2, shape = 22)  -> SIFig17
 
-SIFig14
+SIFig17
     
-ggsave("SIFig14.pdf", width = 8, height = 4, units = "cm")
+ggsave("SIFig17.pdf", width = 8, height = 4, units = "cm")
 
-SIFig14
+SIFig17
 ```
 
 
